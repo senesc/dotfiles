@@ -1,0 +1,303 @@
+global !p
+def comment(): 
+	return vim.eval('vimtex#syntax#in_comment()') == '1'
+
+def env(name):
+	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
+	return x != '0' and y != '0'
+
+endglobal
+
+
+snippet template "Basic template" b
+\documentclass[12pt, a4paper]{article}
+\newcommand{\corso}{${1:`!p
+cwd = path.replace(fn,'')
+import os.path
+if os.path.isfile(cwd + '.config/config.ini'):
+	from configparser import ConfigParser
+	config = ConfigParser()
+	config.read(cwd + '.config/config.ini')
+	snip.rv = config.get('config','corso')
+else:
+	snip.rv = 'corso'
+`}}
+\input{`!p
+cwd = path.replace(fn,'')
+import os.path
+if os.path.isfile(cwd + '.config/preamble.tex'):
+	snip.rv = cwd + 'config/preamble.tex'
+else:
+	snip.rv = '../.config/preamble.tex'
+`}
+\title{$1\\\\$2}
+% vim: set ft=`!p
+import os.path
+if os.path.isfile(cwd + '.config/config.ini'):
+	from configparser import ConfigParser
+	config = ConfigParser()
+	config.read(cwd + '.config/config.ini')
+	snip.rv = config.get('config','filetype') + '.'
+else:
+	snip.rv = ''
+`tex:
+
+\begin{document}
+\maketitle
+		$0
+\end{document}
+endsnippet
+
+snippet insert_jpeg "insert jpeg image" b
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\columnwidth]{$1}
+	\caption{$3}
+	\label{fig:$2}
+\end{figure}
+$0
+endsnippet
+
+context "math()"
+snippet "(\\[a-zA-Z0-9]*\{)([a-zA-Z0-9]*\})([\^_]\{[a-zA-Z0-9\^_\-\\]*\})?([\^_]\{[a-zA-Z0-9\^_\-\\]*\})?\(([a-zA-Z0-9])\)([0-9a-zA-Z'])" "function argument subscript for command name" rA
+`!p snip.rv=match.group(1) + match.group(2)
+if match.group(3) != None:
+	snip.rv += match.group(3)
+if match.group(4) != None:
+	snip.rv += match.group(4)
+snip.rv += '(' + match.group(5) + '_{' + match.group(6) + '}' + ')'
+`
+endsnippet
+
+context "math()"
+snippet "([a-zA-Z0-9])([\^_]\{[a-zA-Z0-9\^_\-\\]*\})?([\^_]\{[a-zA-Z0-9\^_\-\\]*\})?\(([a-zA-Z])\)([0-9a-zA-Z])" "function argument subscript (just 0)" rA
+`!p snip.rv=match.group(1)
+if match.group(2) != None:
+	snip.rv += match.group(2)
+if match.group(3) != None:
+	snip.rv += match.group(3)
+snip.rv += '(' + match.group(4) + '_' + match.group(5) + ')'
+`
+endsnippet
+
+context "math()"
+snippet Im "image" wA
+\im
+endsnippet
+
+context "math()"
+snippet dst "distance" iA
+\left| ${1:x}-${2:x_0} \right| $0
+endsnippet
+
+snippet / "Fraction" i
+\\frac{${VISUAL}}{$1}$0
+endsnippet
+
+context "math()"
+snippet '((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/' "symbol frac" wrA
+\\frac{`!p snip.rv = match.group(1)`}{$1}$0
+endsnippet
+
+priority 1000
+context "math()"
+snippet '^.*\)/' "() frac" wrA
+`!p
+stripped = match.string[:-1]
+depth = 0
+i = len(stripped) - 1
+while True:
+	if stripped[i] == ')': depth += 1
+	if stripped[i] == '(': depth -= 1
+	if depth == 0: break;
+	i-=1
+snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
+`{$1}$0
+endsnippet
+
+context "math()"
+snippet jcp "ordered couple" wA
+\left($1, $2\right)`!p
+if t[3] and t[3][0] not in [',', '.', '?', ' ', ':', ';']:
+	snip.rv = ' '
+else:
+	snip.rv = ''
+`$3
+endsnippet
+
+context "math()"
+snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}
+endsnippet
+
+snippet == "equals" iA
+&= $1 \\\\
+endsnippet
+
+snippet != "equals" iA
+\neq 
+endsnippet
+
+context "math()"
+snippet pmat "pmat" i
+\begin{pmatrix} $1 \end{pmatrix} $0
+endsnippet
+
+snippet bmat "bmat" i
+\begin{bmatrix} $1 \end{bmatrix} $0
+endsnippet
+
+priority 100
+post_jump "create_matrix_placeholders(snip)"
+snippet '(\d+),(\d+)([a-zA-Z])mat' "LaTeX array" wrA
+\begin{`!p
+snip.rv = match.group(3)
+`matrix}
+`!p
+snip.rv = create_matrix(match.group(1), match.group(2), "&", "\t", "\\\\\\\\\n")
+`$0
+\end{`!p
+snip.rv = match.group(3)
+`matrix}
+endsnippet
+
+snippet taylor "taylor" w
+\sum_{${1:k}=${2:0}}^{${3:\infty}} ${4:c_$1} (x-a)^$1 $0
+endsnippet
+
+snippet lim "limit" w
+\lim_{${1:x} \to ${2:x_0}} 
+endsnippet
+
+priority 101
+context "math()"
+snippet limsup "limsup" wA
+\limsup_{n \to \infty} 
+endsnippet
+#\limsup_{${1:n} \to ${2:\infty}} 
+priority 101
+context "math()"
+snippet liminf "liminf" wA
+\liminf{n \to \infty} 
+endsnippet
+# \liminf{${1:n} \to ${2:\infty}} 
+
+snippet part "d/dx" w
+\frac{\partial ${1:V}}{\partial ${2:x}} $0
+endsnippet
+
+context "math()"
+snippet sq "\sqrt{}" iA
+\sqrt{${1:${VISUAL}}} $0
+endsnippet
+
+priority 100
+context "math()"
+snippet nsq "\sqrt[]{}" iA
+\sqrt[$1]{${2:${VISUAL}}} $0
+endsnippet
+
+snippet rij "mrij" i
+(${1:x}_${2:n})_{${3:$2}\\in${4:\\N}}$0
+endsnippet
+
+snippet plot "Plot" w
+\begin{figure}[$1]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			xmin= ${2:-10}, xmax= ${3:10},
+			ymin= ${4:-10}, ymax = ${5:10},
+			axis lines = middle,
+		]
+			\addplot[domain=$2:$3, samples=${6:100}]{$7};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{$8}
+	\label{${9:$8}}
+\end{figure}
+endsnippet
+
+context "not math()"
+snippet __ "italics" iA
+\textit{${VISUAL}$1}`!p
+if t[2] and t[2][0] not in [',', '.', '?', '-', ' ', ':', ';']:
+	snip.rv = ' '
+else:
+	snip.rv = ''
+`$0
+endsnippet
+
+priority 300
+context "math()"
+snippet dint "integral" wA
+\int_{${1:-\infty}}^{${2:\infty}} ${3:${VISUAL}} $0
+endsnippet
+
+priority 300
+context "math()"
+snippet abint "integral" wA
+\int_{\left[ a, b \right]} ${3:${VISUAL}} $0
+endsnippet
+
+snippet nexists "exists" wA
+\nexists
+endsnippet
+
+endsnippet
+snippet jimpl "implies" wA
+&\implies
+endsnippet
+
+context "math()"
+snippet ;;q "equal" iA
+&=
+endsnippet
+
+snippet bigfun "Big function" iA
+\begin{align*}
+	$1: $2 &\longrightarrow $3 \\\\
+	$4 &\longmapsto $1($4) = $0
+.\end{align*}
+endsnippet
+
+priority 10
+context "math()"
+snippet vec "vector" iA
+\vec{$1}$0
+endsnippet
+
+priority 100
+context "math()"
+snippet "([a-zA-Z])vec" "vec" riA
+\vec{`!p snip.rv=match.group(1)`}
+endsnippet
+
+priority 10
+context "math()"
+snippet "hat" "hat" riA
+\hat{$1}$0
+endsnippet
+
+context "math()"
+snippet +d "partial derivative" wA
+\partial 
+endsnippet
+context "math()"
+snippet jgd "gradiente" iA
+\nabla 
+endsnippet
+
+priority 100
+context "math()"
+snippet "([a-zA-Z])hat" "hat" riA
+\hat{`!p snip.rv=match.group(1)`}
+endsnippet
+
+# abbrev
+context "not math()"
+snippet t.c. "tale che" wA
+tale che
+endsnippet
+
+# vim:ft=snippets
