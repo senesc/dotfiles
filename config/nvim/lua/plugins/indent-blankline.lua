@@ -4,18 +4,27 @@ return {
 		require("core.utils").lazy_load("indent-blankline.nvim")
 	end,
 	opts = {
-		indentLine_enabled = 1,
+		enabled = true,
+		indent = {
+			char = '║'
+		},
 		exclude = {
-			buftype = {
+			filetypes = {
 				"help",
-				"terminal",
-				"lazy",
-				"lspinfo",
+				"man",
 				"TelescopePrompt",
 				"TelescopeResults",
+				"lazy",
+				"lspinfo",
 				"mason",
 				"nvdash",
 				"nvcheatsheet",
+			},
+			buftypes = {
+				"terminal",
+				"quickfix",
+				"nofile",
+				"prompt",
 				"",
 			},
 		},
