@@ -1,13 +1,14 @@
 return {
 	"folke/todo-comments.nvim",
+	event = "VeryLazy",
+	dependencies = { "nvim-lua/plenary.nvim" },
 	init = function(_)
 		require("mappings").load_mappings("todocomments")
 	end,
-	dependencies = { "nvim-lua/plenary.nvim" },
-	event = "VeryLazy",
 	opts = {
-		signs = false, -- show icons in the signs column
+		signs = true, -- show icons in the signs column
 		sign_priority = 8, -- sign priority
+
 		-- keywords recognized as todo comments
 		keywords = {
 			FIX = {
@@ -20,7 +21,7 @@ return {
 			HACK = { icon = " ", color = "warning" },
 			WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
 			PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-			NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+			NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
 			TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
 		},
 		gui_style = {

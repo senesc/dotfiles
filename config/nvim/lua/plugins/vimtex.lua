@@ -1,6 +1,6 @@
 return {
 	"lervag/vimtex",
-	lazy = false,
+	lazy = false, -- Should not be lazy loaded as specified in README.md (reasons: little-to-no speed improvement, VimtexInverseSearch would break)
 	config = function(_, _)
 		vim.g.vimtex_enabled = true
 		vim.g.vimtex_fold_enabled = true
@@ -26,16 +26,18 @@ return {
 		vim.g.vimtex_imaps_enabled = 0
 		vim.g.vimtex_matchparen_enabled = 0
 
-		local search_id = vim.api.nvim_create_augroup("FW_BW search", { clear = true })
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "VimtexEventView",
-			command = "silent exec '!hyprctl dispatch focuswindow org.pwmt.zathura'",
-			group = search_id,
-		})
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "VimtexEventViewReverse",
-			command = "silent exec '!hyprctl dispatch focuswindow nvim-qt'",
-			group = search_id,
-		})
+		if os.getenv("XDG_SESSION_DESKTOP") == "hyprland" or os.getenv("XDG_SESSION_DESKTOP") == "Hyprland" then
+			local search_id = vim.api.nvim_create_augroup("FW_BW search", { clear = true })
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "VimtexEventView",
+				command = "silent exec '!hyprctl dispatch focuswindow org.pwmt.zathura'",
+				group = search_id,
+			})
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "VimtexEventViewReverse",
+				command = "silent exec '!hyprctl dispatch focuswindow nvim-qt'",
+				group = search_id,
+			})
+		end
 	end,
 }

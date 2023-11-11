@@ -1,5 +1,9 @@
 return {
 	"folke/tokyonight.nvim",
+	-- TODO: test if this would work and work out some way to manage themes
+	-- enabled = function()
+	-- 	return vim.g.colors_name == "tokyonight" or vim.g.colors_name == "tokyonight-day"
+	-- end,
 	lazy = false,
 	priority = 1000,
 	config = function(_, opts)
