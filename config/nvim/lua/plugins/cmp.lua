@@ -13,6 +13,7 @@ return {
 			"saadparwaiz1/cmp_luasnip",
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-omni",
@@ -85,7 +86,7 @@ return {
 				documentation = {
 					border = border("CmpDocBorder"),
 					winhighlight = "Normal:CmpDoc",
-					max_width = 40,
+					max_width = 50,
 				},
 			},
 			snippet = {
@@ -138,9 +139,15 @@ return {
 			sources = {
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
-				{ name = "buffer" },
+				{ name = "buffer", max_item_count = 5 },
 				{ name = "nvim_lua" },
 				{ name = "path" },
+				{ name = "nvim_lsp_signature_help" },
+			},
+			view = {
+				docs = {
+					auto_open = true,
+				},
 			},
 		}
 

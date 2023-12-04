@@ -3,11 +3,13 @@ return {
 	init = function()
 		require("core.utils").lazy_load("nvim-lspconfig")
 	end,
+	event = "VeryLazy",
 	dependencies = {
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig",
 		"jose-elias-alvarez/null-ls.nvim",
 		"folke/neodev.nvim",
+		"hrsh7th/cmp-nvim-lsp", -- TODO: make a separate file for it so that it doesn't have to laod so early; and also, better config
 	},
 	config = function(_, opts)
 		local lspconfig = require("lspconfig")
@@ -49,7 +51,10 @@ return {
 				},
 			},
 		}
-		lspconfig.clangd.setup({})
+		lspconfig.clangd.setup({
+			on_attach = M.on_attach,
+			capabilities = require("cmp_nvim_lsp").default_capabilities(),
+		})
 
 		lspconfig.lua_ls.setup({
 			on_attach = M.on_attach,
@@ -78,6 +83,7 @@ return {
 			},
 		})
 		require("lspconfig").pylsp.setup({
+			on_attach = M.on_attach,
 			settings = {
 				pylsp = {
 					plugins = {
@@ -90,6 +96,7 @@ return {
 		})
 
 		lspconfig.matlab_ls.setup({
+			on_attach = M.on_attach,
 			settings = {
 				matlab = {
 					telemetry = false,

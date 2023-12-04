@@ -47,7 +47,7 @@ end
 -- List of functions that are gonna be preceded by a backslash that require no parenthesis if the argument is simple enough
 -- local prepend_notmath = "()"
 local prepend_inmath =
-	"(deg|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det)"
+	"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det)"
 local sup_sub_inside_match = "[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*?"
 
 -- Rules for creating templates:
@@ -168,11 +168,11 @@ return {
 		t("\\qquad"),
 	}),
 	s(
-		{ name = "\\( \\)", trig = "mk", snippetType = "autosnippet", condition = not in_math },
+		{ name = "\\( \\)", trig = "mk", snippetType = "autosnippet", condition = not_in_math },
 		{ t("\\( "), i(1), t(" \\)") }
 	),
 	s(
-		{ name = "display math", trig = "dm", wordTrig = true, snippetType = "autosnippet", condition = not in_math },
+		{ name = "display math", trig = "dm", wordTrig = true, snippetType = "autosnippet", condition = not_in_math },
 		{ t({ "", "\\[ " }), i(1), t(" \\]") }
 	),
 	s(
@@ -202,9 +202,16 @@ return {
 		trigEngine = "pattern",
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { f(function(_, snip)
-		return snip.captures[1]
-	end), t("\\shortintertext{"), i(1), t({ "}", "" }), i(0) }),
+	}, {
+		f(function(_, snip)
+			return snip.captures[1]
+		end),
+		t("\\shortintertext{"),
+		i(1),
+		t({ "}", "" }),
+		f(gen_match(1)),
+		i(0),
+	}),
 
 	s({
 		name = "bold text",
@@ -591,6 +598,15 @@ return {
 			end),
 		}),
 	}, { stored = { ["first_arg"] = i(1, "math stuff..."), ["note_arg"] = i(1, "note") } }),
+	-- TODO: add VISUAL
+	s({ name = "overset", trig = "ovs", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, {
+		t("\\overset{\\text{"),
+		i(1, "over"),
+		t("}}{"),
+		i(2),
+		t("} "),
+		i(0),
+	}),
 	s({ name = "underbrace", trig = "udb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
 		c(1, {
 			d(nil, function(_, parent)
@@ -618,6 +634,10 @@ return {
 	s(
 		{ name = "->", trig = "jot", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\to"), snippetType = "autosnippet" }
+	),
+	s(
+		{ name = "double ->", trig = "jdra", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+		{ t("\\rightrightarrows"), snippetType = "autosnippet" }
 	),
 	s(
 		{ name = "|->", trig = "jmps", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
@@ -793,22 +813,29 @@ return {
 	),
 	s({
 		name = "integral",
-		trig = "(d?)(i{1,3}nt)",
+		trig = "(lu|d?)(i{1,3}nt)",
 		trigEngine = "ecma",
 		docstring = "(definite) single/double/triple integral",
 		condition = in_math,
+		snippetType = "autosnippet",
 		wordTrig = true,
 	}, {
 		t("\\"),
 		f(gen_match(2)),
 		d(1, function(args, parent)
 			local nodes = { t("") }
-			if parent.captures[1] == "d" then
+			if parent.captures[1] == "lu" then
 				nodes = {
 					t("_{ "),
 					i(1, "-\\infty"),
 					t(" }^{ "),
 					i(2, "+\\infty"),
+					t(" }"),
+				}
+			elseif parent.captures[1] == "d" then
+				nodes = {
+					t("_{ "),
+					i(1, "\\Omega"),
 					t(" }"),
 				}
 			end
@@ -858,7 +885,7 @@ return {
 	-- Loops
 	-- TODO add visual to the following two
 	s(
-		{ name = "Sum from i to n", trig = "ssum", condition = in_math, snippetType = "autosnippet" },
+		{ name = "Sum from i to n", trig = "ssum", priority = 1001, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\sum_{"), i(1, "i = 1"), t("}^{"), i(2, "n"), t("} "), i(0) }
 	),
 	s(
@@ -1022,6 +1049,24 @@ return {
 		condition = not_in_math,
 		snippetType = "autosnippet",
 	}, { t("equazioni") }),
+	s({
+		trig = "p.to",
+		wordTrig = true,
+		condition = not_in_math,
+		snippetType = "autosnippet",
+	}, { t("punto") }),
+	s({
+		trig = "p.ti",
+		wordTrig = true,
+		condition = not_in_math,
+		snippetType = "autosnippet",
+	}, { t("punti") }),
+	s({
+		trig = "acc.",
+		wordTrig = true,
+		condition = not_in_math,
+		snippetType = "autosnippet",
+	}, { t("accumulazione") }),
 
 	--Testing
 	s({ trig = "xz", condition = in_math, snippetType = "autosnippet", wordTrig = true }, { t("x^{0}") }),

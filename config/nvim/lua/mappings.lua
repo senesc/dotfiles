@@ -146,7 +146,7 @@ M.lspconfig = {
 			"lsp type defintion",
 		},
 
-		["cn"] = {
+		["F2"] = {
 			function()
 				vim.lsp.buf.rename()
 			end,
@@ -285,23 +285,28 @@ M.dapui = {
 
 M.telescope = {
 	n = {
+		["<leader>F"] = { "<cmd> Telescope builtin <CR>", "list telescope functions" },
 		-- find
-		["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "find files" },
+		["<leader>ff"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "find files" },
 		["<leader>ft"] = { "<cmd> Telescope file_browser <CR>", "telescope-file-browser" },
-		["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "find all" },
-		["<leader>fw"] = { "<cmd> Telescope live_grep <CR>", "live grep" },
+		["<leader>fa"] = { "<cmd> Telescope live_grep <CR>", "live grep on all files" },
 		["<leader>fb"] = { "<cmd> Telescope buffers <CR>", "find buffers" },
 		["<M-tab>"] = { "<cmd> Telescope buffers <CR>", "find buffers" },
-		["<leader>fr"] = { "<cmd> Telescope registers <CR>", "find registers" },
+		['<leader>f"'] = { "<cmd> Telescope registers <CR>", "find registers" },
+		["<leader>f'"] = { "<cmd> Telescope marks <CR>", "find marks" },
 		["<leader>fk"] = { "<cmd> Telescope keymaps <CR>", "find keymap" },
 		["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "find help page" },
 		["<leader>fo"] = { "<cmd> Telescope oldfiles <CR>", "find oldfiles" },
-		["<leader>fz"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>", "fuzzy find in current buffer" },
 		["<leader>fs"] = { "<cmd> Telescope sessions_picker <CR>", "find session" },
 		["<leader>fd"] = { "<cmd> Telescope lsp_workspace_diagnostics <CR>", "find session" },
+		["<leader>fj"] = { "<cmd> Telescope jumplist <CR>", "find latest jumps" },
+		["<leader>f/"] = { "<cmd> Telescope search_history <CR>", "find search history" },
 
+		-- TODO: continue setting up these
+		-- Buffer specific
+		["<localleader>fz"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>", "fuzzy find in current buffer" },
+		-- LSP stuff
 		-- ["<localleader>fd"] = { "<cmd> Telescope lsp_document_diagnostics <CR>", "find session" },
-		["<localleader>fm"] = { "<cmd> Telescope marks <CR>", "find marks" },
 		["<localleader>fs"] = { "<cmd> Telescope treesitter <CR>", "find treesitter symbols" },
 		["<localleader>fr"] = { "<cmd> Telescope lsp_references <CR>", "find lsp referencfes" },
 
@@ -310,7 +315,7 @@ M.telescope = {
 		["<leader>fgs"] = { "<cmd> Telescope git_status <CR>", "git status" },
 
 		-- pick a hidden term
-		["<leader>pt"] = { "<cmd> Telescope terms <CR>", "pick hidden term" },
+		-- ["<leader>pt"] = { "<cmd> Telescope terms <CR>", "pick hidden term" },
 
 		--telescope-dap
 		["<leader>dB"] = { "<cmd> Telescope dap list_breakpoints <CR>", "list breakpoints" },
@@ -320,7 +325,7 @@ M.telescope = {
 		["<leader>dC"] = { "<cmd> Telescope dap configurations <CR>", "DAP configurations" },
 
 		-- theme switcher
-		-- ["<leader>th"] = { "<cmd> Telescope themes <CR>", "nvchad themes" },
+		["<leader>cs"] = { "<cmd> Telescope colorschemes <CR>", "change colorscheme" },
 	},
 }
 -- table structure: mode, keybinding, command, opts
@@ -328,7 +333,7 @@ M.nvimtree = {
 	n = {
 		["<leader>tt"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvim tree" },
 		["<leader>tf"] = { "<cmd> NvimTreeFindFile <CR>", "find current file in nvim tree" },
-		["<leader>tg"] = { "<cmd> NvimTreeFocus <CR>", "focus nvim tree" },
+		-- ["<leader>tg"] = { "<cmd> NvimTreeFocus <CR>", "focus nvim tree" },
 	},
 }
 
