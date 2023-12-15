@@ -325,7 +325,7 @@ M.telescope = {
 		["<leader>dC"] = { "<cmd> Telescope dap configurations <CR>", "DAP configurations" },
 
 		-- theme switcher
-		["<leader>cs"] = { "<cmd> Telescope colorschemes <CR>", "change colorscheme" },
+		["<leader>cs"] = { "<cmd> Telescope colorscheme <CR>", "change colorscheme" },
 	},
 }
 -- table structure: mode, keybinding, command, opts
