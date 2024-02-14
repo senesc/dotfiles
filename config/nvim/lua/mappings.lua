@@ -20,6 +20,7 @@ M.global = {
 		["<leader>b"] = { "<cmd> enew <CR>", "new buffer" },
 		["<leader>w"] = { "<cmd> write <CR>", "save buffer" },
 		["<leader>tn"] = { "<cmd> tabnew <CR>", "new tab" },
+		["<leader>c"] = { "<cmd> tabnew <CR>", "new tab" },
 		["<leader>tc"] = { "<cmd> tabclose <CR>", "close tab" },
 		["<leader>z"] = { "<C-w>|<C-w>_", "maximize pane" },
 

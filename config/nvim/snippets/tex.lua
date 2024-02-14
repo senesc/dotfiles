@@ -191,6 +191,36 @@ return {
 		t(" \\end{cases}"),
 		i(0),
 	}),
+	s({ name = "array", trig = "ary", trigEngine = "pattern", condition = in_math, snippetType = "autosnippet" }, {
+		t("\\begin{array}{l} "),
+		d(1, function(_, parent)
+			return sn(nil, { i(1, parent.env.TM_SELECTED_TEXT) })
+		end),
+		t(" \\end{array}"),
+		i(0),
+	}),
+	s({
+		name = "handy cases",
+		trig = "hcase",
+		trigEngine = "pattern",
+		condition = in_math,
+		snippetType = "autosnippet",
+	}, {
+		t("\\begin{cases} "),
+		i(1),
+		t(" &\\text{"),
+		i(2, " se "),
+		t("} "),
+		i(3),
+		t("\\\\ "),
+		i(4),
+		t(" &\\text{"),
+		i(5, " se "),
+		t("} "),
+		i(6),
+		t(" \\end{cases}"),
+		i(0),
+	}),
 	s({ name = "text", trig = "tx", snippetType = "autosnippet", condition = in_math }, {
 		t("\\text{"),
 		d(1, visual_cbrace_spaceoptional),
@@ -813,7 +843,7 @@ return {
 	),
 	s({
 		name = "integral",
-		trig = "(lu|d?)(i{1,3}nt)",
+		trig = "(b|d?)(i{1,3}nt)",
 		trigEngine = "ecma",
 		docstring = "(definite) single/double/triple integral",
 		condition = in_math,
@@ -824,7 +854,7 @@ return {
 		f(gen_match(2)),
 		d(1, function(args, parent)
 			local nodes = { t("") }
-			if parent.captures[1] == "lu" then
+			if parent.captures[1] == "b" then
 				nodes = {
 					t("_{ "),
 					i(1, "-\\infty"),
@@ -1067,6 +1097,14 @@ return {
 		condition = not_in_math,
 		snippetType = "autosnippet",
 	}, { t("accumulazione") }),
+	s(
+		{ trig = "diff.", wordTrig = true, condition = not_in_math, snippetType = "autosnippet" },
+		{ t("differenziale") }
+	),
+	s(
+		{ trig = "difff.", wordTrig = true, condition = not_in_math, snippetType = "autosnippet" },
+		{ t("differenziali") }
+	),
 
 	--Testing
 	s({ trig = "xz", condition = in_math, snippetType = "autosnippet", wordTrig = true }, { t("x^{0}") }),

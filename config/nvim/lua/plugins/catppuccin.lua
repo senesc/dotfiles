@@ -4,10 +4,10 @@ return {
 	lazy = false,
 	priority = 1000,
 	opts = {
-		flavour = "frappe",
+		flavour = "mocha",
 		background = {
 			light = "latte",
-			dark = "frappe",
+			dark = "mocha",
 		},
 		integrations = {
 			cmp = true,
