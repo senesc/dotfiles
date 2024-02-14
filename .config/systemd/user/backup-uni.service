@@ -1,0 +1,20 @@
+[Unit]
+Description=Backup of Uni files on Mega using rclone
+After=systemd-networkd-wait-online.service
+Requires=systemd-networkd-wait-online.service
+
+[Service]
+Type=oneshot
+TimeoutStartSec=5min
+
+# ExecStartPre=/usr/bin/notify-send -u low "starting: uni -> mcrypt" "starting backup of uni folder to mega crypt"
+ExecStart=/bin/sh -c 'rclone sync -v --backup-dir mbak:backups/uni/$$(date +%%Y%%m%%d-%%H%%M) $$UNI_DIR mbak:uni'
+ExecStopPost=/bin/sh -c 'test $$EXIT_STATUS -eq 0 && notify-send -u low "synced: uni -> mcrypt" "backup completed successfully" || notify-send -u critical "failed: uni -> mcrypt" "there was an error backing up uni. please consult log."'
+
+# don't attempt to restart if UNI DIR is not found
+Restart=on-failure
+RestartPreventExitStatus=3
+RestartSec=30min
+
+NoNewPrivileges=true
+ProtectHome=read-only

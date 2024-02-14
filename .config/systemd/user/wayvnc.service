@@ -1,0 +1,27 @@
+[Unit]
+Description=WayVNC server; also manages hyprland display
+
+[Service]
+Type=simple
+
+ExecStartPre=/usr/bin/hyprctl output create headless
+ExecStart=/usr/bin/sh -c 'wayvnc --log-level=info --socket=$$XDG_RUNTIME_DIR/wayvncctl --output=$$(hyprctl -j monitors | jq -r \'map(select(.name | contains("HEADLESS"))).[-1].["name"]\')'
+ExecStopPost=/usr/bin/sh -c 'hyprctl output remove $$(hyprctl -j monitors | jq -r \'map(select(.name | contains("HEADLESS"))).[-1].["name"]\')'
+
+CapabilityBoundingSet=~
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+PrivateDevices=yes
+PrivateUsers=yes
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectProc=ptraceable
+ProtectSystem=strict
+ReadOnlyPaths=/home/matteo
+RestrictRealtime=yes
+SystemCallFilter=@network-io @basic-io @sync @file-system @known
