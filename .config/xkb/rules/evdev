@@ -1,0 +1,10 @@
+// TODO: where should i put this? before or after the import?
+
+! model		layout	=	compat		types
+  *		snsc	=	complete	snsc+complete
+
+// Include the system 'evdev' file
+! include %S/evdev
+
+! model		layout	=	compat		types
+  *		snsc	=	complete	snsc+complete

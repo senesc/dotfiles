@@ -1,0 +1,22 @@
+default partial xkb_types "default" {
+
+    virtual_modifiers  LevelThree;
+
+    type "CUSTOM_ALPHA_LVLT" {
+	modifiers = Shift + Lock + LevelThree;
+	map[None] = Level1;
+	map[Shift+Lock] = Level1;
+	map[Shift] = Level2;
+	map[Lock] = Level2;
+	map[LevelThree] = Level3;
+	map[Shift+LevelThree] = Level3;
+	map[Lock+LevelThree] = Level3;
+	map[Shift+Lock+LevelThree] = Level3;
+	preserve[Shift+LevelThree] = Shift;
+	preserve[Lock+LevelThree] = Lock;
+	preserve[Shift+Lock+LevelThree] = Shift;
+	level_name[Level1] = "Base";
+	level_name[Level2] = "Shift";
+	level_name[Level3] = "Level3";
+    };
+};
