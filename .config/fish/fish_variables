@@ -2,6 +2,7 @@
 # VERSION: 3.0
 SETUVAR --export EDITOR:nvim
 SETUVAR --export FZF_DEFAULT_OPTS:\x2d\x2dheight\x2040\x25\x20\x2d\x2dborder\x20\x2d\x2dmarker\x3d\x27\x2a\x27\x20\x2d\x2dreverse
+SETUVAR ZO_CMD:zo
 SETUVAR Z_CMD:z
 SETUVAR Z_DATA:/home/matteo/\x2elocal/share/z/data
 SETUVAR Z_DATA_DIR:/home/matteo/\x2elocal/share/z

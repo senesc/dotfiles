@@ -8,5 +8,7 @@ Like any other dotfiles collection, this is a work in progress. I'll try keeping
 
 # Installing
 When cloning this repository, you should clone submodules too:
-```git clone --recursive https://github.com/senesc/dotfiles.git```
+```
+git clone --recursive https://github.com/senesc/dotfiles.git
+```
 To quickly link the dotfiles in the correct places, I use `stow`. I should write a script, though.

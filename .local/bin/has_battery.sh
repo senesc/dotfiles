@@ -1,5 +1,5 @@
 #!/bin/bash
-# Checks for presence of battery.
+# Checks for presence of battery, i.e. if current device is a laptop.
 # Returns 0 if any battery is available, 1 otherwise.
 
 for d in $(ls /sys/class/power_supply/)
