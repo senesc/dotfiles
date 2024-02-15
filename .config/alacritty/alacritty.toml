@@ -1,0 +1,33 @@
+import = ["~/.config/alacritty/catppuccin/catppuccin-mocha.toml"]
+
+[bell]
+animation = "EaseOutExpo"
+color = "#ffffff"
+duration = 200
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[cursor.style]
+shape = "Beam"
+
+[env]
+TERM = "alacritty"
+
+[font]
+size = 15.0
+
+[font.bold]
+family = "Ubuntu Mono"
+
+[font.bold_italic]
+family = "Ubuntu Mono"
+
+[font.italic]
+family = "Ubuntu Mono"
+
+[font.normal]
+family = "Ubuntu Mono"
+
+[scrolling]
+multiplier = 3

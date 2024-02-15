@@ -10,3 +10,6 @@
 [submodule ".config/tmux/plugins/tmux-battery"]
 	path = .config/tmux/plugins/tmux-battery
 	url = https://github.com/tmux-plugins/tmux-battery
+[submodule ".config/alacritty/catppuccin"]
+	path = .config/alacritty/catppuccin
+	url = https://github.com/catppuccin/alacritty
