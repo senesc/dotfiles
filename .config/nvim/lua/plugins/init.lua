@@ -1,70 +1,4 @@
--- All plugins have lazy=true by default,to load a plugin on startup just lazy=false
--- List of all default plugins & their definitions
 --[[local plugins = {
-
-  -- nvchad plugins
-  { "NvChad/extensions", branch = "v2.0" },
-
-  {
-    "NvChad/base46",
-    branch = "v2.0",
-    build = function()
-      require("base46").load_all_highlights()
-    end,
-  },
-
-  {
-    "NvChad/ui",
-    branch = "v2.0",
-    lazy = false,
-    config = function()
-      require "nvchad_ui"
-    end,
-  },
-
-  {
-    "NvChad/nvim-colorizer.lua",
-    init = function()
-      require("core.utils").lazy_load "nvim-colorizer.lua"
-    end,
-    config = function(_, opts)
-      require("colorizer").setup(opts)
-
-      -- execute colorizer as soon as possible
-      vim.defer_fn(function()
-        require("colorizer").attach_to_buffer(0)
-      end, 0)
-    end,
-  },
-
-
-  -- git stuff
-  {
-    "lewis6991/gitsigns.nvim",
-    ft = "gitcommit",
-    init = function()
-      -- load gitsigns only when a git file is opened
-      vim.api.nvim_create_autocmd({ "BufRead" }, {
-        group = vim.api.nvim_create_augroup("GitSignsLazyLoad", { clear = true }),
-        callback = function()
-          vim.fn.system("git -C " .. '"' .. vim.fn.expand "%:p:h" .. '"' .. " rev-parse")
-          if vim.v.shell_error == 0 then
-            vim.api.nvim_del_augroup_by_name "GitSignsLazyLoad"
-            vim.schedule(function()
-              require("lazy").load { plugins = { "gitsigns.nvim" } }
-            end)
-          end
-        end,
-      })
-    end,
-    opts = function()
-      return require("plugins.configs.others").gitsigns
-    end,
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "git")
-      require("gitsigns").setup(opts)
-    end,
-  },
 
   -- load luasnips + cmp related in insert mode only
 
@@ -93,9 +27,13 @@ local plugin_files = {
 	"codewindow",
 	"comment",
 	"copilot",
+	"copilot-cmp",
+	"copilot-lualine",
+	"gitsigns",
 	"indent-blankline",
 	"linediff-vim",
 	"lspconfig",
+	"lualine",
 	"luasnip",
 	"mason",
 	"mason-lspconfig",

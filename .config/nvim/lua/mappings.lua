@@ -17,7 +17,6 @@ M.global = {
 		["<M-J>"] = { "<cmd> lua require('tmux').resize_bottom() <CR>", "window down" },
 		["<M-K>"] = { "<cmd> lua require('tmux').resize_top() <CR>", "window up" },
 
-		["<leader>b"] = { "<cmd> enew <CR>", "new buffer" },
 		["<leader>w"] = { "<cmd> write <CR>", "save buffer" },
 		["<leader>tn"] = { "<cmd> tabnew <CR>", "new tab" },
 		["<leader>c"] = { "<cmd> tabnew <CR>", "new tab" },
@@ -302,6 +301,7 @@ M.telescope = {
 		["<leader>fd"] = { "<cmd> Telescope lsp_workspace_diagnostics <CR>", "find session" },
 		["<leader>fj"] = { "<cmd> Telescope jumplist <CR>", "find latest jumps" },
 		["<leader>f/"] = { "<cmd> Telescope search_history <CR>", "find search history" },
+		["<leader>b"] = { "<cmd> Telescope buffers <CR>", "new buffer" },
 
 		-- TODO: continue setting up these
 		-- Buffer specific

@@ -5,8 +5,8 @@ return {
 		require("core.utils").lazy_load("nvim-cmp")
 	end,
 	dependencies = {
-		require("plugins.luasnip"),
-		require("plugins.nvim-autopairs"),
+		"L3MON4D3/LuaSnip",
+		"windwp/nvim-autopairs",
 
 		-- cmp sources plugins
 		{
@@ -17,12 +17,11 @@ return {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-omni",
+			"copilot-cmp",
 		},
 	},
-
 	opts = function()
 		local cmp = require("cmp")
-
 		local cmp_ui = {
 			icons = true,
 			lspkind_text = true,
@@ -100,11 +99,11 @@ return {
 			mapping = {
 				["<C-p>"] = cmp.mapping.select_prev_item(),
 				["<C-n>"] = cmp.mapping.select_next_item(),
-				["<C-d>"] = cmp.mapping.scroll_docs(-4),
-				["<C-f>"] = cmp.mapping.scroll_docs(4),
+				["<C-u>"] = cmp.mapping.scroll_docs(-4),
+				["<C-d>"] = cmp.mapping.scroll_docs(4),
 				["<C-Space>"] = cmp.mapping.complete(),
 				["<Esc>"] = cmp.mapping.close(),
-				["<CR>"] = cmp.mapping.confirm({
+				["<S-CR>"] = cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.Replace,
 					select = false,
 				}),
@@ -138,6 +137,7 @@ return {
 			},
 			sources = {
 				{ name = "nvim_lsp" },
+				{ name = "copilot" },
 				{ name = "luasnip" },
 				{ name = "buffer", max_item_count = 5 },
 				{ name = "nvim_lua" },
