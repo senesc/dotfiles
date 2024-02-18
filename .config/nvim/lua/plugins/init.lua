@@ -40,6 +40,7 @@ local plugin_files = {
 	"mini-sessions",
 	"mini-statusline",
 	"neodev",
+	"nerdy",
 	"null-ls",
 	"nvim-autopairs",
 	"nvim-dap",
