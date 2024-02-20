@@ -4,5 +4,5 @@ return {
 		"nvim-dap",
 		"nvim-treesitter",
 	},
-	event = "VeryLazy",
+	lazy = true,
 }

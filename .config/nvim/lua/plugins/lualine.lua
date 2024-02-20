@@ -46,15 +46,15 @@ return {
 								unknown = "#FF5555",
 							},
 						},
-						-- spinners = require("copilot-lualine.spinners").dots,
-						spinner_color = "#6272A4",
+						-- spinners set below
+						-- spinner_color = "#6272A4",
 					},
 					show_colors = true,
 					show_loading = true,
 				},
 				"encoding",
 				"filetype",
-			}, -- Copilot inserted here
+			},
 			lualine_y = { "progress" },
 			lualine_z = { "location" },
 		},
@@ -71,4 +71,8 @@ return {
 		inactive_winbar = {},
 		extensions = {},
 	},
+	config = function(_, opts)
+		opts.sections.lualine_x[1].symbols.spinners = require("copilot-lualine.spinners").dots_pulse
+		require("lualine").setup(opts)
+	end,
 }

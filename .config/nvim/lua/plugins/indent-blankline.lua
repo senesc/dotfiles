@@ -6,7 +6,7 @@ return {
 	opts = {
 		enabled = true,
 		indent = {
-			char = '║'
+			char = "║",
 		},
 		exclude = {
 			filetypes = {
@@ -37,7 +37,7 @@ return {
 		-- show_first_indent_level = false,
 	},
 	config = function(_, opts)
-		require("mappings").load_mappings("blankline")
+		require("core.mappings").load_mappings("blankline")
 		require("ibl").setup(opts)
 	end,
 }

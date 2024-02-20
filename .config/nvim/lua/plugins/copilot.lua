@@ -4,12 +4,11 @@ return {
 	build = ":Copilot auth",
 	opts = {
 		suggestion = { enabled = false },
-		panel = { enabled = false },
+		panel = { enabled = true, auto_refresh = true, layout = { position = "right" } },
 		-- filetypes = {
 		-- 	markdown = true,
 		-- 	help = false,
 		-- 	c = true,
 		-- },
 	},
-	-- TODO: when should this start? important thing is i know when it is running and when it isn't. Abt, this, go configure lualine.
 }

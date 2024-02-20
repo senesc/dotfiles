@@ -2,7 +2,8 @@ return {
 	"nvim-treesitter/nvim-treesitter",
 	cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
 	build = ":TSUpdate",
-
+	event = "BufEnter",
+	dependecies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 	opts = {
 		ensure_installed = { "lua" },
 		auto_install = true,
@@ -12,6 +13,15 @@ return {
 			disable = { "latex" },
 		},
 		indent = { enable = true },
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				init_selection = "<M-i>",
+				node_incremental = "<M-i>",
+				-- scope_incremental = "<M-s>", don't really know what this does
+				node_decremental = "<M-o>",
+			},
+		},
 	},
 	config = function(_, opts)
 		require("nvim-treesitter.configs").setup(opts)

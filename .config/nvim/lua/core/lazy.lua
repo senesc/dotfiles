@@ -1,14 +1,25 @@
-M = {}
+-- Lazy setup
 
-M.config = {
-	defaults = { lazy = true },
+-- if lazy is not installed, install it
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
+end
+vim.opt.rtp:append(lazypath)
+
+local lazy_opts = {
 
 	ui = {
 		icons = {
 			ft = "",
-			lazy = "鈴 ",
-			loaded = "",
-			not_loaded = "",
 		},
 	},
 
@@ -45,4 +56,4 @@ M.config = {
 		},
 	},
 }
-return M
+require("lazy").setup("plugins", lazy_opts)

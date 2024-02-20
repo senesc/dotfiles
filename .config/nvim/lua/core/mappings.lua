@@ -146,7 +146,7 @@ M.lspconfig = {
 			"lsp type defintion",
 		},
 
-		["F2"] = {
+		["<F2>"] = {
 			function()
 				vim.lsp.buf.rename()
 			end,
@@ -329,11 +329,11 @@ M.telescope = {
 		["<leader>cs"] = { "<cmd> Telescope colorscheme <CR>", "change colorscheme" },
 	},
 }
--- table structure: mode, keybinding, command, opts
 M.nvimtree = {
+	-- Mappings for the nvimtree buffer are set in nvim-tree.lua
 	n = {
 		["<leader>tt"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvim tree" },
-		["<leader>tf"] = { "<cmd> NvimTreeFindFile <CR>", "find current file in nvim tree" },
+		-- ["<leader>tf"] = { "<cmd> NvimTreeFindFile <CR>", "find current file in nvim tree" },
 		-- ["<leader>tg"] = { "<cmd> NvimTreeFocus <CR>", "focus nvim tree" },
 	},
 }
@@ -358,19 +358,6 @@ M.whichkey = {
 
 M.nvterm = {
 	n = {
-		["<leader>th"] = {
-			function()
-				require("nvterm.terminal").new("horizontal")
-			end,
-			"open horizontal nvterm",
-		},
-		["<leader>tv"] = {
-			function()
-				require("nvterm.terminal").new("vertical")
-			end,
-			"open vertical nvterm",
-		},
-
 		["<M-b>"] = {
 			function()
 				require("nvterm.terminal").toggle("horizontal")
@@ -440,30 +427,13 @@ M.luasnip = {
 	},
 }
 
-M.tabby = {
-	n = {
-		["<leader>t<F2>"] = { ":RenameTab ", "Rename tab" },
-	},
-}
-
-M.codewindow = {
-	n = {
-		["<leader>mm"] = {
-			function()
-				require("codewindow").toggle_minimap()
-			end,
-			"toggle minimap",
-		},
-	},
-}
-
 M.aerial = {
 	n = {
-		["<leader>o"] = {
+		["<leader>O"] = {
 			"<cmd> AerialToggle <CR>",
 			"toggle outline",
 		},
-		["<leader>O"] = {
+		["<leader>o"] = {
 			"<cmd> AerialNavToggle <CR>",
 			"toggle breadcrumbs outline",
 		},
@@ -486,6 +456,8 @@ M.todocomments = {
 		},
 	},
 }
+
+-- M.treesitter set in nvim-treesitter.lua
 
 M.load_mappings = function(mapname, mapping_opt)
 	vim.schedule(function()

@@ -3,7 +3,7 @@ return {
 	event = "VeryLazy",
 	dependencies = { "nvim-lua/plenary.nvim" },
 	init = function(_)
-		require("mappings").load_mappings("todocomments")
+		require("core.mappings").load_mappings("todocomments")
 	end,
 	opts = {
 		signs = true, -- show icons in the signs column

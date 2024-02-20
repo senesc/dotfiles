@@ -5,6 +5,8 @@ return {
 	end,
 	event = "VeryLazy",
 	dependencies = {
+		"stevearc/dressing.nvim",
+
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig",
 		"jose-elias-alvarez/null-ls.nvim",
@@ -21,7 +23,7 @@ return {
 			client.server_capabilities.documentFormattingProvider = false
 			client.server_capabilities.documentRangeFormattingProvider = false
 
-			require("mappings").load_mappings("lspconfig", { buffer = bufnr })
+			require("core.mappings").load_mappings("lspconfig", { buffer = bufnr })
 
 			--if client.server_capabilities.signatureHelpProvider then
 			--  require("nvchad_ui.signature").setup(client)

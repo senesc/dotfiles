@@ -1,9 +1,11 @@
 return {
 	"mfussenegger/nvim-dap",
 	init = function(_)
-		require("mappings").load_mappings("dap")
+		require("core.mappings").load_mappings("dap")
 	end,
-	config = function(_, opts)
+	lazy = true,
+	-- TODO: when should this and ui,virtualtext be loaded?
+	config = function()
 		local dap = require("dap")
 		dap.adapters.codelldb = {
 			type = "server",
@@ -13,5 +15,6 @@ return {
 				args = { "--port", "${port}" },
 			},
 		}
+		-- no need to call setup
 	end,
 }

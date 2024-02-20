@@ -5,7 +5,7 @@ return {
 	-- build = "make install_jsregexp", it would break my patched library
 	init = function()
 		require("core.utils").lazy_load("LuaSnip")
-		require("mappings").load_mappings("luasnip")
+		require("core.mappings").load_mappings("luasnip")
 	end,
 	opts = {
 		history = true,

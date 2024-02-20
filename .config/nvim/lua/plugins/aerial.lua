@@ -1,9 +1,9 @@
 return {
 	"stevearc/aerial.nvim",
 	init = function(_)
-		require("mappings").load_mappings("aerial")
+		require("core.mappings").load_mappings("aerial")
 	end,
-	event = "VeryLazy",
+	event = "BufEnter",
 	opts = {
 		on_attach = function(bufnr)
 			-- Jump forwards/backwards with '{' and '}'
@@ -11,8 +11,10 @@ return {
 			vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
 		end,
 		layout = {
-
-			default_direction = "right",
+			default_direction = "prefer_left",
+			placement = "edge",
+			min_width = 20,
+			max_width = { 45, 0.25 },
 		},
 		attach_mode = "global",
 	},

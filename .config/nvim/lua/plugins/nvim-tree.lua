@@ -3,6 +3,7 @@ return {
 	cmd = { "NvimTreeToggle", "NvimTreeFocus" },
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
+		"nvim-tree/dressing.nvim",
 	},
 	opts = {
 		disable_netrw = true,
@@ -31,6 +32,12 @@ return {
 		},
 		modified = {
 			enable = true,
+		},
+		tab = {
+			sync = {
+				open = true,
+				close = true,
+			},
 		},
 		on_attach = function(bufnr)
 			local api = require("nvim-tree.api")
@@ -146,7 +153,7 @@ return {
 		},
 		view = {
 			adaptive_size = true,
-			centralize_selection = true,
+			centralize_selection = false,
 			signcolumn = "yes",
 			side = "left",
 			width = 30,
@@ -165,7 +172,7 @@ return {
 		},
 	},
 	init = function()
-		require("mappings").load_mappings("nvimtree")
+		require("core.mappings").load_mappings("nvimtree")
 		vim.api.nvim_create_autocmd({ "BufEnter" }, {
 			pattern = "NvimTree*",
 			callback = function()
@@ -178,11 +185,4 @@ return {
 			end,
 		})
 	end,
-	config = function(_, opts)
-		require("nvim-tree").setup(opts)
-	end,
-	--[[
-      dofile(vim.g.base46_cache .. "nvimtree")
-      vim.g.nvimtree_side = opts.view.side
-	--]]
 }

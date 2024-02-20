@@ -35,7 +35,7 @@ vim.opt.scrolloff = 15
 vim.opt.foldenable = false
 
 -- disable nvim intro
--- vim.opt.shortmess:append "sI"
+vim.opt.shortmess:append("I")
 
 vim.opt.signcolumn = "auto"
 vim.opt.splitbelow = true
@@ -57,7 +57,7 @@ vim.api.nvim_create_autocmd("DirChanged", {
 
 vim.g.sessionpath = vim.fn.stdpath("data") .. "/sessions/"
 if not utils.is_dir(vim.fn.stdpath("data") .. "/undodir") then
-	-- TODO os.execute not best practice??
+	-- TODO: os.execute not best practice??
 	os.execute("mkdir -p " .. vim.fn.stdpath("data") .. "/undodir")
 end
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
@@ -79,7 +79,7 @@ vim.g.lua_snippets_path = { vim.fn.stdpath("config") .. "/snippets" }
 
 -- vim.g.lighttheme = false
 
-local maps = require("mappings")
+local maps = require("core.mappings")
 maps.load_mappings("global")
 
-require("plugins")
+require("core.lazy")

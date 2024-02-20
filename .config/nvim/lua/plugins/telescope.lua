@@ -74,6 +74,6 @@ return {
 		require("telescope").load_extension("file_browser")
 	end,
 	init = function()
-		require("mappings").load_mappings("telescope")
+		require("core.mappings").load_mappings("telescope")
 	end,
 }

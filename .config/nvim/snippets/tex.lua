@@ -172,8 +172,25 @@ return {
 		{ t("\\( "), i(1), t(" \\)") }
 	),
 	s(
-		{ name = "display math", trig = "dm", wordTrig = true, snippetType = "autosnippet", condition = not_in_math },
-		{ t({ "", "\\[ " }), i(1), t(" \\]") }
+		{
+			name = "display math",
+			trig = "(%s*)dm",
+			trigEngine = "pattern",
+			wordTrig = false,
+			snippetType = "autosnippet",
+			condition = not_in_math,
+		},
+		{
+			d(1, function(_, parent)
+				if parent.env.TM_CURRENT_LINE == "dm" then
+					return sn(nil, { t("\\[ ") })
+				else
+					return sn(nil, { t({ "", "\\[ " }) })
+				end
+			end),
+			i(2),
+			t(" \\]"),
+		}
 	),
 	s(
 		{ name = "gather*", trig = "gath", trigEngine = "pattern", snippetType = "autosnippet" },
@@ -793,28 +810,28 @@ return {
 		t(" \\right) "),
 		i(0),
 	}),
-	s({
-		name = "function auto expand",
-		trig = "(\\\\[a-zA-Z]+(?:{[a-zA-Z]*})?'?|[a-zA-Z]'?) ?([\\^_]{"
-			.. sup_sub_inside_match
-			.. "})? ?([\\^_]{"
-			.. sup_sub_inside_match
-			.. "})?('*)F([a-zA-Z0-9])",
-		trigEngine = "ecma",
-		snippetType = "autosnippet",
-		wordTrig = true,
-		condition = in_math,
-		show_condition = in_math,
-	}, {
-		f(gen_match(1)),
-		f(gen_match(2)),
-		f(gen_match(3)),
-		f(gen_match(4)),
-		t("\\left( "),
-		f(gen_match(5)),
-		t(" \\right) "),
-		i(0),
-	}),
+	-- s({
+	-- 	name = "function auto expand",
+	-- 	trig = "(\\\\[a-zA-Z]+(?:{[a-zA-Z]*})?'?|[a-zA-Z]'?) ?([\\^_]{"
+	-- 		.. sup_sub_inside_match
+	-- 		.. "})? ?([\\^_]{"
+	-- 		.. sup_sub_inside_match
+	-- 		.. "})?('*)F([a-zA-Z0-9])",
+	-- 	trigEngine = "ecma",
+	-- 	snippetType = "autosnippet",
+	-- 	wordTrig = true,
+	-- 	condition = in_math,
+	-- 	show_condition = in_math,
+	-- }, {
+	-- 	f(gen_match(1)),
+	-- 	f(gen_match(2)),
+	-- 	f(gen_match(3)),
+	-- 	f(gen_match(4)),
+	-- 	t("\\left( "),
+	-- 	f(gen_match(5)),
+	-- 	t(" \\right) "),
+	-- 	i(0),
+	-- }),
 	s({
 		name = "prepend slash in_math",
 		trig = "(?<!\\\\)" .. prepend_inmath,
@@ -1017,7 +1034,7 @@ return {
 		{ name = "upsilon", trig = "ups", snippetType = "autosnippet", condition = in_math, wordTrig = true },
 		{ t("\\upsilon") }
 	),
-	s({ name = "xi", trig = "xxi", snippetType = "autosnippet", condition = in_math, wordTrig = true }, { t("\\xi") }),
+	s({ name = "xi", trig = "ixi", snippetType = "autosnippet", condition = in_math, wordTrig = true }, { t("\\xi") }),
 	s(
 		{ name = "zeta", trig = "zta", snippetType = "autosnippet", condition = in_math, wordTrig = true },
 		{ t("\\zeta") }
