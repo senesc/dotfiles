@@ -40,6 +40,7 @@ M.remove_disabled_keys = function(chadrc_mappings, default_mappings)
 	return default_mappings
 end
 
+-- TODO: remove this (safely)
 M.lazy_load = function(plugin)
 	vim.api.nvim_create_autocmd({ "BufRead", "BufWinEnter", "BufNewFile" }, {
 		group = vim.api.nvim_create_augroup("BeLazyOnFileOpen" .. plugin, {}),

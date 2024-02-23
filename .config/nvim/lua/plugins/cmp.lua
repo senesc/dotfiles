@@ -1,9 +1,9 @@
 return {
 	"hrsh7th/nvim-cmp",
-	event = "InsertEnter",
-	init = function()
-		require("core.utils").lazy_load("nvim-cmp")
-	end,
+	event = { "BufEnter", "InsertEnter" },
+	-- init = function()
+	-- require("core.utils").lazy_load("nvim-cmp")
+	-- end,
 	dependencies = {
 		"L3MON4D3/LuaSnip",
 		"windwp/nvim-autopairs",
@@ -29,32 +29,10 @@ return {
 			border_color = "grey_fg", -- only applicable for "default" style, use color names from base30 variables
 			selected_item_bg = "simple", -- colored / simple
 		}
-		local cmp_style = cmp_ui.style
 
 		local field_arrangement = {
 			atom = { "kind", "abbr", "menu" },
 			atom_colored = { "kind", "abbr", "menu" },
-		}
-
-		local formatting_style = {
-			-- default fields order i.e completion word + item.kind + item.kind icons
-			fields = field_arrangement[cmp_style] or { "abbr", "kind", "menu" },
-
-			format = function(_, item)
-				local icons = require("core.icons").lspkind
-				local icon = (cmp_ui.icons and icons[item.kind]) or ""
-
-				if cmp_style == "atom" or cmp_style == "atom_colored" then
-					icon = " " .. icon .. " "
-					item.menu = cmp_ui.lspkind_text and "   (" .. item.kind .. ")" or ""
-					item.kind = icon
-				else
-					icon = cmp_ui.lspkind_text and (" " .. icon .. " ") or icon
-					item.kind = string.format("%s %s", icon, cmp_ui.lspkind_text and item.kind or "")
-				end
-
-				return item
-			end,
 		}
 
 		local function border(hl_name)
@@ -94,7 +72,26 @@ return {
 				end,
 			},
 
-			formatting = formatting_style,
+			formatting = {
+				-- default fields order i.e completion word + item.kind + item.kind icons
+				fields = field_arrangement[cmp_ui.style] or { "abbr", "kind", "menu" },
+
+				format = function(_, item)
+					local icons = require("core.icons").lspkind
+					local icon = (cmp_ui.icons and icons[item.kind]) or ""
+
+					if cmp_ui.style == "atom" or cmp_ui.style == "atom_colored" then
+						icon = " " .. icon .. " "
+						item.menu = cmp_ui.lspkind_text and "   (" .. item.kind .. ")" or ""
+						item.kind = icon
+					else
+						icon = cmp_ui.lspkind_text and (" " .. icon .. " ") or icon
+						item.kind = string.format("%s %s", icon, cmp_ui.lspkind_text and item.kind or "")
+					end
+
+					return item
+				end,
+			},
 
 			mapping = {
 				["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -105,7 +102,7 @@ return {
 				["<Esc>"] = cmp.mapping.close(),
 				["<S-CR>"] = cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.Replace,
-					select = false,
+					select = true,
 				}),
 				["<Tab>"] = cmp.mapping(function(fallback)
 					if require("luasnip").expand_or_jumpable() then
@@ -151,7 +148,7 @@ return {
 			},
 		}
 
-		if cmp_style ~= "atom" and cmp_style ~= "atom_colored" then
+		if cmp_ui.style ~= "atom" and cmp_ui.style ~= "atom_colored" then
 			options.window.completion.border = border("CmpBorder")
 		end
 

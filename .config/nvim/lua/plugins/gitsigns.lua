@@ -18,7 +18,7 @@ return {
 		-- })
 	end,
 	--TODO: add config opts
-	setup = function(_, opts)
+	config = function(_, opts)
 		require("gitsigns").setup(opts)
 	end,
 }

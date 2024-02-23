@@ -20,18 +20,7 @@ return {
 		-- export on_attach & capabilities for custom lspconfigs
 
 		M.on_attach = function(client, bufnr)
-			client.server_capabilities.documentFormattingProvider = false
-			client.server_capabilities.documentRangeFormattingProvider = false
-
 			require("core.mappings").load_mappings("lspconfig", { buffer = bufnr })
-
-			--if client.server_capabilities.signatureHelpProvider then
-			--  require("nvchad_ui.signature").setup(client)
-			--end
-
-			--if not utils.load_config().ui.lsp_semantic_tokens then
-			--  client.server_capabilities.semanticTokensProvider = nil
-			--end
 		end
 
 		M.capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -55,7 +44,6 @@ return {
 		}
 		lspconfig.clangd.setup({
 			on_attach = M.on_attach,
-			capabilities = require("cmp_nvim_lsp").default_capabilities(),
 		})
 
 		lspconfig.lua_ls.setup({
@@ -105,6 +93,20 @@ return {
 				},
 			},
 			single_file_support = true,
+		})
+
+		--Those are all from vscode-langservers-extracted npm module, not updated in mason!
+		lspconfig.jsonls.setup({
+			on_attach = M.on_attach,
+		})
+		lspconfig.cssls.setup({
+			on_attach = M.on_attach,
+		})
+		lspconfig.eslint.setup({ -- JavaScript
+			on_attach = M.on_attach,
+		})
+		lspconfig.html.setup({
+			on_attach = M.on_attach,
 		})
 
 		return M

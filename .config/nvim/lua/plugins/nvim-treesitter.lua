@@ -3,7 +3,7 @@ return {
 	cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
 	build = ":TSUpdate",
 	event = "BufEnter",
-	dependecies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+	dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 	opts = {
 		ensure_installed = { "lua" },
 		auto_install = true,

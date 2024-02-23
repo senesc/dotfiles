@@ -3,7 +3,7 @@ return {
 	cmd = { "NvimTreeToggle", "NvimTreeFocus" },
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
-		"nvim-tree/dressing.nvim",
+		"stevearc/dressing.nvim",
 	},
 	opts = {
 		disable_netrw = true,
