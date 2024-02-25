@@ -109,6 +109,8 @@ return {
 			on_attach = M.on_attach,
 		})
 
+		lspconfig.cmake.setup{}
+
 		return M
 	end,
 }
