@@ -43,6 +43,13 @@ return {
 					goto_next_start = {
 						["]m"] = "@function.outer",
 						["]M"] = "@class.outer",
+						["]/"] = "@comment.inner",
+						["]s"] = "@statement.outer",
+						["]l"] = "@loop.outer",
+						["]L"] = "@loop.inner",
+						["]c"] = "@conditional.inner",
+						["]C"] = "@conditional.outer",
+						["]a"] = "@parameter.inner",
 					},
 					goto_next_end = {
 						["]n"] = "@function.outer",
@@ -51,6 +58,13 @@ return {
 					goto_previous_start = {
 						["[m"] = "@function.outer",
 						["[M"] = "@class.outer",
+						["[/"] = "@comment.inner",
+						["[s"] = "@statement.outer",
+						["[l"] = "@loop.outer",
+						["[L"] = "@loop.inner",
+						["[a"] = "@parameter.inner",
+						["[c"] = "@conditional.inner",
+						["[C"] = "@conditional.outer",
 					},
 					goto_previous_end = {
 						["[n"] = "@function.outer",
@@ -59,5 +73,12 @@ return {
 				},
 			},
 		})
+		local repmove = require("nvim-treesitter.textobjects.repeatable_move")
+		vim.keymap.set({ "n", "x", "o" }, ";", repmove.repeat_last_move)
+		vim.keymap.set({ "n", "x", "o" }, ",", repmove.repeat_last_move_opposite)
+		vim.keymap.set({ "n", "x", "o" }, "f", repmove.builtin_f)
+		vim.keymap.set({ "n", "x", "o" }, "F", repmove.builtin_F)
+		vim.keymap.set({ "n", "x", "o" }, "t", repmove.builtin_t)
+		vim.keymap.set({ "n", "x", "o" }, "T", repmove.builtin_T)
 	end,
 }

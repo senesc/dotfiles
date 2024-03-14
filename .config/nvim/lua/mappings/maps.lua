@@ -167,7 +167,7 @@ M.lspconfig = {
 			"diagnostic setloclist",
 		},
 
-		["<leader>fm"] = {
+		["<localleader>fm"] = {
 			function()
 				vim.lsp.buf.format({ async = true })
 			end,
@@ -268,6 +268,7 @@ M.telescope = {
 		["<leader>f'"] = { "<cmd> Telescope marks <CR>", "find marks" },
 		["<leader>fk"] = { "<cmd> Telescope keymaps <CR>", "find keymap" },
 		["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "find help page" },
+		["<leader>fm"] = { "<cmd> Telescope man_pages <CR>", "find help page" },
 		["<leader>fo"] = { "<cmd> Telescope oldfiles <CR>", "find oldfiles" },
 		["<leader>fs"] = { "<cmd> Telescope sessions_picker <CR>", "find session" },
 		["<leader>fd"] = { "<cmd> Telescope lsp_workspace_diagnostics <CR>", "find session" },
@@ -449,7 +450,7 @@ M.neovide = {
 			}
 		},
 		["<C-w>0"] = {
-			 "<cmd> lua vim.g.neovide_scale_factor = 1.0 <CR>",
+			"<cmd> lua vim.g.neovide_scale_factor = 1.0 <CR>",
 			"set scale factor",
 			opts = {
 				silent = true
@@ -658,45 +659,45 @@ M.nvimtree_onattach = {
 		["x"] = {
 			function()
 				local buf = require("core.utils").get_bufnr_by_path(require("nvim-tree.api").tree.get_node_under_cursor()
-				.absolute_path)
+					.absolute_path)
 				if buf ~= nil then
 					vim.api.nvim_buf_delete(buf, {})
 				end
 			end, "Close buffer",
 		},
-		["ga"] = {function ()
+		["ga"] = { function()
 			local api = require("nvim-tree.api")
-			os.execute("git add ".. api.tree.get_node_under_cursor().absolute_path)
+			os.execute("git add " .. api.tree.get_node_under_cursor().absolute_path)
 			api.git.reload()
-		end}, --TODO: continue after this
+		end }, --TODO: continue after this
 	},
 }
 
 M.tmux = {
 	n = {
-		["<M-h>"] = { function ()
+		["<M-h>"] = { function()
 			require('tmux').move_left()
 		end, "focus window to the left" },
-		["<M-j>"] = { function ()
+		["<M-j>"] = { function()
 			require('tmux').move_bottom()
 		end, "focus window down" },
-		["<M-k>"] = { function ()
+		["<M-k>"] = { function()
 			require('tmux').move_top()
 		end, "focus window up" },
-		["<M-l>"] = { function ()
+		["<M-l>"] = { function()
 			require('tmux').move_right()
 		end, "focus window to the right" },
 
-		["<M-H>"] = { function ()
+		["<M-H>"] = { function()
 			require('tmux').resize_left()
 		end, "resize window to the left" },
-		["<M-J>"] = { function ()
+		["<M-J>"] = { function()
 			require('tmux').resize_bottom()
 		end, "resize window down" },
-		["<M-K>"] = { function ()
+		["<M-K>"] = { function()
 			require('tmux').resize_top()
 		end, "resize window up" },
-		["<M-L>"] = { function ()
+		["<M-L>"] = { function()
 			require('tmux').resize_right()
 		end, "resize window to the right" },
 	}
@@ -704,46 +705,46 @@ M.tmux = {
 
 M.gitsigns = {
 	n = {
-		["]g"] = { function ()
+		["]g"] = { function()
 			require("gitsigns").next_hunk()
 			require("nvim-tree.api").git.reload()
-		end, "Next Git Hunk"},
-		["[g"] = { function ()
+		end, "Next Git Hunk" },
+		["[g"] = { function()
 			require("gitsigns").prev_hunk()
 			require("nvim-tree.api").git.reload()
-		end, "Next Git Hunk"},
+		end, "Next Git Hunk" },
 		["<leader>ga"] = {
-			function ()
+			function()
 				require("gitsigns").stage_hunk() -- TODO: add ranges
 				require("nvim-tree.api").git.reload()
 			end, "Stage Git Hunk"
 		},
 		["<leader>gA"] = {
-			function ()
+			function()
 				require("gitsigns").stage_buffer()
 				require("nvim-tree.api").git.reload()
 			end, "Stage Buffer"
 		},
 		["<leader>gu"] = {
-			function ()
+			function()
 				require("gitsigns").undo_stage_hunk()
 				require("nvim-tree.api").git.reload()
 			end
 		},
 		["<leader>gr"] = {
-			function ()
+			function()
 				require("gitsigns").reset_hunk()
 				require("nvim-tree.api").git.reload()
 			end
 		},
 		["<leader>gR"] = {
-			function ()
+			function()
 				require("gitsigns").reset_buffer()
 				require("nvim-tree.api").git.reload()
 			end
 		},
 		["<leader>gd"] = {
-			function ()
+			function()
 				require("gitsigns").diffthis()
 			end
 		},

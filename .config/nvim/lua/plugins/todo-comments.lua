@@ -20,7 +20,7 @@ return {
 			},
 			TODO = { icon = " ", color = "info" },
 			REWATCH = { icon = "󰈈 ", color = "warning" },
-			HACK = { icon = " ", color = "warning" },
+			HACK = { icon = " ", color = "warning", alt = {"HACKY"} },
 			WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
 			PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
 			NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
