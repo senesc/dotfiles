@@ -1,7 +1,8 @@
 return {
 	"mfussenegger/nvim-dap",
 	init = function(_)
-		require("core.mappings").load_mappings("dap")
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.dap)
 	end,
 	lazy = true,
 	-- TODO: when should this and ui,virtualtext be loaded?

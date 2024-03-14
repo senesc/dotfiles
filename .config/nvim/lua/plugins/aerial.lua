@@ -1,7 +1,8 @@
 return {
 	"stevearc/aerial.nvim",
 	init = function(_)
-		require("core.mappings").load_mappings("aerial")
+		local mappings = require('mappings')
+		mappings.load_maps(mappings.maps.aerial)
 	end,
 	event = "BufEnter",
 	opts = {

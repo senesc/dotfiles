@@ -78,7 +78,7 @@ vim.g.lua_snippets_path = { vim.fn.stdpath("config") .. "/snippets" }
 
 -- vim.g.lighttheme = false
 
-local maps = require("core.mappings")
-maps.load_mappings("global")
+local mappings = require("mappings")
+mappings.load_maps(mappings.maps.init)
 
 require("core.lazy")

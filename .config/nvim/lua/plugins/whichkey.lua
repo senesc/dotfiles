@@ -2,7 +2,8 @@ return {
 	"folke/which-key.nvim",
 	event = "VeryLazy",
 	init = function()
-		require("core.mappings").load_mappings("whichkey")
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.whichkey)
 	end,
 	opts = {
 		window = {

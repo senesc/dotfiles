@@ -2,7 +2,8 @@ return {
 	"numToStr/Comment.nvim",
 	keys = { "gc", "gcc" },
 	init = function()
-		require("core.mappings").load_mappings("comment")
+		local mappings = require('mappings')
+		mappings.load_maps(mappings.maps.comment)
 	end,
 	config = function()
 		require("Comment").setup()

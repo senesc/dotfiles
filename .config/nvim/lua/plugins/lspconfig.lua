@@ -11,7 +11,7 @@ return {
 		"williamboman/mason-lspconfig",
 		"jose-elias-alvarez/null-ls.nvim",
 		"folke/neodev.nvim",
-		"hrsh7th/cmp-nvim-lsp", -- TODO: make a separate file for it so that it doesn't have to laod so early; and also, better config
+		"hrsh7th/cmp-nvim-lsp", -- TODO: make a separate file for it so that it doesn't have to laod so early; also, improve config
 	},
 	config = function(_, opts)
 		local lspconfig = require("lspconfig")
@@ -20,7 +20,8 @@ return {
 		-- export on_attach & capabilities for custom lspconfigs
 
 		M.on_attach = function(client, bufnr)
-			require("core.mappings").load_mappings("lspconfig", { buffer = bufnr })
+			local mappings = require("mappings")
+			mappings.load_maps(mappings.maps.lspconfig, {buffer = bufnr})
 		end
 
 		M.capabilities = vim.lsp.protocol.make_client_capabilities()

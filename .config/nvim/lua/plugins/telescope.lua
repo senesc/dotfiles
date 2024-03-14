@@ -6,6 +6,10 @@ return {
 		"nvim-telescope/telescope-file-browser.nvim",
 	},
 	cmd = { "Telescope" },
+	init = function()
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.telescope)
+	end,
 	opts = {
 		defaults = {
 			mappings = {
@@ -72,8 +76,5 @@ return {
 		require("telescope").setup(opts)
 		require("telescope").load_extension("sessions_picker")
 		require("telescope").load_extension("file_browser")
-	end,
-	init = function()
-		require("core.mappings").load_mappings("telescope")
 	end,
 }

@@ -89,6 +89,8 @@ return {
 			dapui.open()
 		end
 		dapui.setup(opts)
-		require("core.mappings").load_mappings("dapui")
+
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.dapui)
 	end,
 }

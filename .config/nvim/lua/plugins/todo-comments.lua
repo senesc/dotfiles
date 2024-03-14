@@ -1,9 +1,10 @@
 return {
 	"folke/todo-comments.nvim",
-	event = "VeryLazy",
+	event = "BufEnter",
 	dependencies = { "nvim-lua/plenary.nvim" },
 	init = function(_)
-		require("core.mappings").load_mappings("todocomments")
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.todocomments)
 	end,
 	opts = {
 		signs = true, -- show icons in the signs column

@@ -1,27 +1,16 @@
 local M = {}
-local default_opts = { noremap = true }
 
-M.global = {
+M.init = {
 	n = {
 		["<Esc>"] = { ":noh <CR>", "clear highlights", opts = { silent = true } },
 		["<tab>"] = { "<cmd> tabnext <CR>", "next buffer", opts = { silent = true } },
 		["<S-tab>"] = { "<cmd> tabprevious <CR>", "next buffer", opts = { silent = true } },
 
-		["<M-h>"] = { "<cmd> lua require('tmux').move_left() <CR>", "window left" },
-		["<M-l>"] = { "<cmd> lua require('tmux').move_right() <CR>", "window right" },
-		["<M-j>"] = { "<cmd> lua require('tmux').move_bottom() <CR>", "window down" },
-		["<M-k>"] = { "<cmd> lua require('tmux').move_top() <CR>", "window up" },
-
-		["<M-H>"] = { "<cmd> lua require('tmux').resize_left() <CR>", "window left" },
-		["<M-L>"] = { "<cmd> lua require('tmux').resize_right() <CR>", "window right" },
-		["<M-J>"] = { "<cmd> lua require('tmux').resize_bottom() <CR>", "window down" },
-		["<M-K>"] = { "<cmd> lua require('tmux').resize_top() <CR>", "window up" },
-
 		["<leader>w"] = { "<cmd> write <CR>", "save buffer" },
 		["<leader>tn"] = { "<cmd> tabnew <CR>", "new tab" },
-		["<leader>c"] = { "<cmd> tabnew <CR>", "new tab" },
+		-- ["<leader>c"] = { "<cmd> tabnew <CR>", "new tab" },
 		["<leader>tc"] = { "<cmd> tabclose <CR>", "close tab" },
-		["<leader>z"] = { "<C-w>|<C-w>_", "maximize pane" },
+		["<C-w>z"] = { "<C-w>|<C-w>_", "maximize pane" },
 
 		["<M-g>"] = { "[szg``", "mark last misspelling as good" },
 		["<M-c>"] = { "[s1z=`]", "auto correct last misspelling" },
@@ -81,23 +70,6 @@ M.blankline = {
 			"Jump to current_context",
 		},
 	},
-}
-
-M.minisessions = {
-	-- n = {
-	-- ["<leader>sl"] = {
-	-- 	function()
-	-- 		require("mini.sessions").get_latest()
-	-- 	end,
-	-- 	"latest session",
-	-- },
-	-- 	["<leader>ss"] = {
-	-- 		function()
-	-- 			require("mini.sessions").select()
-	-- 		end,
-	-- 		"select session",
-	-- 	},
-	-- },
 }
 
 M.lspconfig = {
@@ -329,6 +301,7 @@ M.telescope = {
 		["<leader>cs"] = { "<cmd> Telescope colorscheme <CR>", "change colorscheme" },
 	},
 }
+
 M.nvimtree = {
 	-- Mappings for the nvimtree buffer are set in nvim-tree.lua
 	n = {
@@ -457,38 +430,324 @@ M.todocomments = {
 	},
 }
 
--- M.treesitter set in nvim-treesitter.lua
+-- from https://github.com/neovide/neovide/issues/1301#issuecomment-1705046950
+-- don't know why but these function much better as commands
+M.neovide = {
+	n = {
+		["<C-=>"] = {
+			"<cmd> lua vim.g.neovide_scale_factor = math.min(vim.g.neovide_scale_factor + 0.05,  1.5) <CR>",
+			"zoom in",
+			opts = {
+				silent = true
+			}
+		},
+		["<C-->"] = {
+			"<cmd> lua vim.g.neovide_scale_factor = math.max(vim.g.neovide_scale_factor - 0.05,  0.7) <CR>",
+			"zoom out",
+			opts = {
+				silent = true
+			}
+		},
+		["<C-w>0"] = {
+			 "<cmd> lua vim.g.neovide_scale_factor = 1.0 <CR>",
+			"set scale factor",
+			opts = {
+				silent = true
+			}
+		},
+	},
+}
 
-M.load_mappings = function(mapname, mapping_opt)
-	vim.schedule(function()
-		local function set_section_map(section_values)
-			-- if section_values.plugin then
-			--   return
-			-- end
-			--
-			-- section_values.plugin = nil
-			for mode, mode_values in pairs(section_values) do
-				for keybind, mapping_info in pairs(mode_values) do
-					-- merge default + user opts
-					local opts = vim.tbl_deep_extend("force", default_opts, mapping_info.opts or {})
-					opts = vim.tbl_deep_extend("force", opts, mapping_opt or {})
-
-					mapping_info.opts, opts.mode = nil, nil
-					opts.desc = mapping_info[2]
-
-					vim.keymap.set(mode, keybind, mapping_info[1], opts)
+M.nvimtree_onattach = {
+	n = {
+		["<CR>"] = {
+			function()
+				require("nvim-tree.api").node.open.edit()
+			end, "Open node",
+		},
+		["o"] = {
+			function()
+				require("nvim-tree.api").node.open.edit()
+			end, "Open node",
+		},
+		["<C-]>"] = {
+			function()
+				require("nvim-tree.api").tree.change_root_to_node()
+			end, "Change root to node",
+		},
+		["<M-Up>"] = {
+			function()
+				require("nvim-tree.api").tree.change_root_to_parent()
+			end, "Move root up",
+		},
+		["zc"] = {
+			function()
+				require("nvim-tree.api").node.navigate.parent_close()
+			end, "Close node",
+		},
+		["zO"] = {
+			function()
+				require("nvim-tree.api").tree.expand_all()
+			end, "Expand node recursive",
+		},
+		["zM"] = {
+			function()
+				require("nvim-tree.api").tree.collapse_all()
+			end, "Collapse tree",
+		},
+		["zo"] = {
+			function()
+				require("nvim-tree.api").node.open.edit()
+			end, "Open node",
+		},
+		["g?"] = {
+			function()
+				require("nvim-tree.api").tree.toggle_help()
+			end, "Help",
+		},
+		["<C-t>"] = {
+			function()
+				require("nvim-tree.api").node.open.tab()
+			end, "Open: New Tab",
+		},
+		["<C-v>"] = {
+			function()
+				require("nvim-tree.api").node.open.vertical()
+			end, "Open: Vertical Split",
+		},
+		["<C-x>"] = {
+			function()
+				require("nvim-tree.api").node.open.horizontal()
+			end, "Open: Horizontal Split",
+		},
+		["]]"] = {
+			function()
+				require("nvim-tree.api").node.navigate.sibling.next()
+			end, "Next Sibling",
+		},
+		["[["] = {
+			function()
+				require("nvim-tree.api").node.navigate.sibling.prev()
+			end, "Prev Sibling",
+		},
+		["[g"] = {
+			function()
+				require("nvim-tree.api").node.navigate.git.prev()
+			end, "Prev Git",
+		},
+		["]g"] = {
+			function()
+				require("nvim-tree.api").node.navigate.git.next()
+			end, "Next Git",
+		},
+		["[o"] = {
+			function()
+				require("nvim-tree.api").node.navigate.opened.prev()
+			end, "Prev Open",
+		},
+		["]o"] = {
+			function()
+				require("nvim-tree.api").node.navigate.opened.next()
+			end, "Next Open",
+		},
+		["]d"] = {
+			function()
+				require("nvim-tree.api").node.navigate.diagnostics.next()
+			end, "Next Diagnostic",
+		},
+		["[d"] = {
+			function()
+				require("nvim-tree.api").node.navigate.diagnostics.prev()
+			end, "Prev Diagnostic",
+		},
+		["m"] = {
+			function()
+				require("nvim-tree.api").marks.toggle()
+			end, "Toggle Bookmark",
+		},
+		["<M-f>m"] = {
+			function()
+				require("nvim-tree.api").tree.toggle_no_bookmark_filter()
+			end, "Toggle Filter: Marked",
+		},
+		["<M-f>h"] = {
+			function()
+				require("nvim-tree.api").tree.toggle_hidden_filter()
+			end, "Toggle Filter: Dotfiles",
+		},
+		["<M-f>gi"] = {
+			function()
+				require("nvim-tree.api").tree.toggle_gitignore_filter()
+			end, "Toggle Filter: Git Ignore",
+		},
+		["<M-f>gc"] = {
+			function()
+				require("nvim-tree.api").tree.toggle_git_clean_filter()
+			end, "Toggle Filter: Git Clean",
+		},
+		["<M-f>b"] = {
+			function()
+				require("nvim-tree.api").tree.toggle_no_buffer_filter()
+			end, "Toggle Filter: Buffers",
+		},
+		["I"] = {
+			function()
+				require("nvim-tree.api").node.show_info_popup()
+			end, "Info",
+		},
+		["i"] = {
+			function()
+				require("nvim-tree.api").node.open.preview()
+			end, "Open Preview",
+		},
+		["D"] = {
+			function()
+				require("nvim-tree.api").fs.remove()
+			end, "Delete",
+		},
+		["dd"] = {
+			function()
+				require("nvim-tree.api").fs.cut()
+			end, "Cut",
+		},
+		["r"] = {
+			function()
+				require("nvim-tree.api").fs.rename_full()
+			end, "Rename: Full Path",
+		},
+		["a"] = {
+			function()
+				require("nvim-tree.api").fs.create()
+			end, "Create File Or Directory",
+		},
+		["R"] = {
+			function()
+				require("nvim-tree.api").fs.rename_basename()
+			end, "Rename: Basename",
+		},
+		["yp"] = {
+			function()
+				require("nvim-tree.api").fs.copy.absolute_path()
+			end, "Copy Absolute Path",
+		},
+		["yn"] = {
+			function()
+				require("nvim-tree.api").fs.copy.filename()
+			end, "Copy filename",
+		},
+		["yy"] = {
+			function()
+				require("nvim-tree.api").fs.copy.node()
+			end, "Copy file",
+		},
+		["p"] = {
+			function()
+				require("nvim-tree.api").fs.paste()
+			end, "Paste",
+		},
+		["bd"] = {
+			function()
+				require("nvim-tree.api").marks.bulk.delete()
+			end, "Delete Bookmarked",
+		},
+		["bmv"] = {
+			function()
+				require("nvim-tree.api").marks.bulk.move()
+			end, "Move Bookmarked",
+		},
+		["x"] = {
+			function()
+				local buf = require("core.utils").get_bufnr_by_path(require("nvim-tree.api").tree.get_node_under_cursor()
+				.absolute_path)
+				if buf ~= nil then
+					vim.api.nvim_buf_delete(buf, {})
 				end
+			end, "Close buffer",
+		},
+		["ga"] = {function ()
+			local api = require("nvim-tree.api")
+			os.execute("git add ".. api.tree.get_node_under_cursor().absolute_path)
+			api.git.reload()
+		end}, --TODO: continue after this
+	},
+}
+
+M.tmux = {
+	n = {
+		["<M-h>"] = { function ()
+			require('tmux').move_left()
+		end, "focus window to the left" },
+		["<M-j>"] = { function ()
+			require('tmux').move_bottom()
+		end, "focus window down" },
+		["<M-k>"] = { function ()
+			require('tmux').move_top()
+		end, "focus window up" },
+		["<M-l>"] = { function ()
+			require('tmux').move_right()
+		end, "focus window to the right" },
+
+		["<M-H>"] = { function ()
+			require('tmux').resize_left()
+		end, "resize window to the left" },
+		["<M-J>"] = { function ()
+			require('tmux').resize_bottom()
+		end, "resize window down" },
+		["<M-K>"] = { function ()
+			require('tmux').resize_top()
+		end, "resize window up" },
+		["<M-L>"] = { function ()
+			require('tmux').resize_right()
+		end, "resize window to the right" },
+	}
+}
+
+M.gitsigns = {
+	n = {
+		["]g"] = { function ()
+			require("gitsigns").next_hunk()
+			require("nvim-tree.api").git.reload()
+		end, "Next Git Hunk"},
+		["[g"] = { function ()
+			require("gitsigns").prev_hunk()
+			require("nvim-tree.api").git.reload()
+		end, "Next Git Hunk"},
+		["<leader>ga"] = {
+			function ()
+				require("gitsigns").stage_hunk() -- TODO: add ranges
+				require("nvim-tree.api").git.reload()
+			end, "Stage Git Hunk"
+		},
+		["<leader>gA"] = {
+			function ()
+				require("gitsigns").stage_buffer()
+				require("nvim-tree.api").git.reload()
+			end, "Stage Buffer"
+		},
+		["<leader>gu"] = {
+			function ()
+				require("gitsigns").undo_stage_hunk()
+				require("nvim-tree.api").git.reload()
 			end
-		end
-		local mappings = M
-		if type(mapname) == "string" then
-			-- mappings[section]["plugin"] = nil
-			mappings = { mappings[mapname] }
-		end
-		for _, sect in pairs(mappings) do
-			set_section_map(sect)
-		end
-	end)
-end
+		},
+		["<leader>gr"] = {
+			function ()
+				require("gitsigns").reset_hunk()
+				require("nvim-tree.api").git.reload()
+			end
+		},
+		["<leader>gR"] = {
+			function ()
+				require("gitsigns").reset_buffer()
+				require("nvim-tree.api").git.reload()
+			end
+		},
+		["<leader>gd"] = {
+			function ()
+				require("gitsigns").diffthis()
+			end
+		},
+	}
+}
 
 return M

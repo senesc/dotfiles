@@ -11,4 +11,7 @@ if vim.g.neovide then
 	vim.g.neovide_fullscreen = false
 	vim.g.neovide_remember_window_size = true
 	vim.g.neovide_cursor_trail_size = 0.5
+
+	local mappings = require("mappings")
+	mappings.load_maps(mappings.maps.neovide)
 end

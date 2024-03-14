@@ -1,8 +1,10 @@
 return {
 	"lukas-reineke/indent-blankline.nvim",
 	init = function()
-		require("core.utils").lazy_load("indent-blankline.nvim")
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.blankline)
 	end,
+	main = "ibl",
 	opts = {
 		enabled = true,
 		indent = {
@@ -36,8 +38,4 @@ return {
 		-- show_trailing_blankline_indent = false,
 		-- show_first_indent_level = false,
 	},
-	config = function(_, opts)
-		require("core.mappings").load_mappings("blankline")
-		require("ibl").setup(opts)
-	end,
 }

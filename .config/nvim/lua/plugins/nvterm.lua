@@ -27,7 +27,8 @@ return {
 		},
 	},
 	init = function()
-		require("core.mappings").load_mappings("nvterm")
+		local mappings = require("mappings")
+		mappings.load_maps(mappings.maps.nvterm)
 	end,
 	config = function(_, opts)
 		--require "base46.term"

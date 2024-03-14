@@ -47,7 +47,7 @@ end
 -- List of functions that are gonna be preceded by a backslash that require no parenthesis if the argument is simple enough
 -- local prepend_notmath = "()"
 local prepend_inmath =
-	"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det)"
+"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det)"
 local sup_sub_inside_match = "[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*?"
 
 -- Rules for creating templates:
@@ -423,6 +423,17 @@ return {
 		condition = in_math,
 		snippetType = "autosnippet",
 	}, { t("\\overline{"), f(gen_match(1)), t("}") }),
+	s({
+		name = "Xdot",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9])(\\.+)d",
+		trigEngine = "ecma",
+		condition = in_math,
+		snippetType = "autosnippet",
+	}, { t("\\"), f(
+		function(args, parent, user_args)
+			return string.rep("d",string.len( parent.captures[2] ))
+		end
+	), t("ot{"), f(gen_match(1)), t("}") }),
 	s(
 		{ name = "bar", trig = "bar", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\overline{"), d(1, visual_cbrace_spaceoptional) }
