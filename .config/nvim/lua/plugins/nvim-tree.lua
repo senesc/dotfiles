@@ -50,12 +50,6 @@ return {
 		modified = {
 			enable = true,
 		},
-		tab = {
-			sync = {
-				open = true,
-				close = true,
-			},
-		},
 		on_attach = function(bufnr)
 			local mappings = require("mappings")
 			mappings.load_maps(mappings.maps.nvimtree_onattach, {buffer = bufnr, noremap = true, silent = true, nowait = true})

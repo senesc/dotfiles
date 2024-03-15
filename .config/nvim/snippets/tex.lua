@@ -47,7 +47,7 @@ end
 -- List of functions that are gonna be preceded by a backslash that require no parenthesis if the argument is simple enough
 -- local prepend_notmath = "()"
 local prepend_inmath =
-"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det)"
+"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det|Mat|GL)"
 local sup_sub_inside_match = "[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*?"
 
 -- Rules for creating templates:

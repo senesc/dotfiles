@@ -26,8 +26,10 @@ return {
 		},
 		sections = {
 			lualine_a = { "mode" },
-			lualine_b = { "branch", "diff", "diagnostics" },
-			lualine_c = { "filename" },
+			lualine_b = { "diff", "diagnostics" },
+			lualine_c = { {
+				"filename",
+			} },
 			lualine_x = {
 				{
 					"copilot",
@@ -37,13 +39,13 @@ return {
 								enabled = "",
 								disabled = "",
 								warning = "",
-								unknown = "",
+								unknown = "",
 							},
 							hl = {
 								enabled = "#50FA7B",
 								disabled = "#6272A4",
 								warning = "#FFB86C",
-								unknown = "#FF5555",
+								unknown = "#6272A4",
 							},
 						},
 						-- spinners set below
@@ -52,7 +54,7 @@ return {
 					show_colors = true,
 					show_loading = true,
 				},
-				"encoding",
+				-- "encoding",
 				"filetype",
 			},
 			lualine_y = { "progress" },
@@ -61,15 +63,41 @@ return {
 		inactive_sections = {
 			lualine_a = {},
 			lualine_b = {},
-			lualine_c = { "filename" },
+			lualine_c = { {
+				"filename",
+				path = 1
+			} },
 			lualine_x = { "location" },
 			lualine_y = {},
 			lualine_z = {},
 		},
-		tabline = {},
+		tabline = {
+			lualine_a = { "branch" },
+			lualine_b = {
+				{
+					"tabs",
+					tab_max_length = 60,
+					mode = 2,
+					path = 0,
+					symbols = {
+						modified = ''
+					},
+					fmt = function (name, context)
+						local buflist = vim.fn.tabpagebuflist(context.tabnr)
+						local winnr = vim.fn.tabpagewinnr(context.tabnr)
+						local bufnr = buflist[winnr]
+						local mod = vim.fn.getbufvar(bufnr, '&mod')
+
+						return name .. (mod == 1 and ' ●' or '')
+					end,
+				}
+			},
+			lualine_x = {"windows"},
+			lualine_z = {"hostname"}
+		},
 		winbar = {},
 		inactive_winbar = {},
-		extensions = {},
+		extensions = { "nvim-tree", "nvim-dap-ui" },
 	},
 	config = function(_, opts)
 		opts.sections.lualine_x[1].symbols.spinners = require("copilot-lualine.spinners").dots_pulse

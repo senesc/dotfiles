@@ -18,6 +18,12 @@ return {
 			max_width = { 45, 0.25 },
 		},
 		attach_mode = "global",
+		nav = {
+			preview = true,
+			keymaps = {
+				["<Esc>"] = "actions.close"
+			}
+		}
 	},
 	-- Optional dependencies
 	dependencies = {

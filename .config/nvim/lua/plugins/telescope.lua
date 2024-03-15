@@ -14,9 +14,15 @@ return {
 		defaults = {
 			mappings = {
 				i = {
-					["<esc>"] = function(bufnr)
-						require("telescope.actions").close(bufnr)
-					end,
+					-- ["<esc>"] = function(bufnr)
+					-- 	require("telescope.actions").close(bufnr)
+					-- end,
+					["<C-a>"] = require("telescope.actions").select_all,
+				},
+				n = {
+					["H"] = false,
+					["<Esc>"] = require("telescope.actions").close,
+					[" "] = require("telescope.actions").toggle_selection,
 				},
 			},
 			vimgrep_arguments = {
@@ -56,6 +62,37 @@ return {
 			borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 			color_devicons = true,
 			set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+		},
+		pickers = {
+			buffers = {
+				sort_mru = true,
+				mappings = {
+					i = {
+						["<C-w>"] = function()
+							local entry = require("telescope.actions.state").get_selected_entry()
+							if entry ~= nil then
+								vim.api.nvim_buf_delete(entry.bufnr, {})
+							end
+						end,
+					},
+					n = {
+						["x"] = function(prompt_bufnr)
+							local action_state = require("telescope.actions.state")
+							local selects = action_state.get_current_picker(prompt_bufnr):get_multi_selection()
+							if next(selects) == nil then
+								local entry = action_state.get_selected_entry()
+								if entry ~= nil then
+									vim.api.nvim_buf_delete(entry.bufnr, {})
+								end
+							end
+							for _, entry in ipairs(selects) do
+								vim.api.nvim_buf_delete(entry.bufnr, {})
+							end
+							require("telescope.actions").close(prompt_bufnr)
+						end,
+					},
+				}
+			}
 		},
 		extensions_list = { "themes", "terms" },
 		extensions = {
