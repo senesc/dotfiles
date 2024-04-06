@@ -32,6 +32,9 @@ return {
 			open_file = {
 				resize_window = true,
 			},
+			change_dir = {
+				enable = false,
+			}
 		},
 		diagnostics = {
 			enable = true,

@@ -1,6 +1,6 @@
 return {
 	"rcarriga/nvim-dap-ui",
-	dependencies = { "nvim-dap" },
+	dependencies = { "nvim-dap", "nvim-nio" },
 	event = "VeryLazy",
 	opts = {
 		controls = {

@@ -320,13 +320,6 @@ M.whichkey = {
 			end,
 			"which-key all keymaps",
 		},
-		["<leader>wk"] = {
-			function()
-				local input = vim.fn.input("WhichKey: ")
-				vim.cmd("WhichKey " .. input)
-			end,
-			"which-key query lookup",
-		},
 	},
 }
 
@@ -480,6 +473,13 @@ M.nvimtree_onattach = {
 			function()
 				require("nvim-tree.api").tree.change_root_to_parent()
 			end, "Move root up",
+		},
+		["zx"] = {
+			function ()
+				local dir = vim.fn.getcwd(-1, -1)
+				print(dir)
+				require("nvim-tree.api").tree.change_root(dir)
+			end, "Change root to global cwd"
 		},
 		["zc"] = {
 			function()

@@ -1,0 +1,8 @@
+maximize = false
+
+[font]
+normal = ["FiraCode Nerd Font Mono"]
+size = 18
+
+[font.features]
+"FiraCode Nerd Font Mono" = [ "+cv16", "+cv31", "+cv06", "+cv14", "+onum", "+ss02", "+ss04", "+cv30", "+ss06" ]

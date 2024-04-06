@@ -16,7 +16,7 @@ return {
 				winbar = {},
 			},
 			ignore_focus = {},
-			always_divide_middle = true,
+			always_divide_middle = false,
 			globalstatus = false,
 			refresh = {
 				statusline = 1000,
@@ -92,7 +92,7 @@ return {
 					end,
 				}
 			},
-			lualine_x = {"windows"},
+			-- lualine_x = {"windows"},
 			lualine_z = {"hostname"}
 		},
 		winbar = {},

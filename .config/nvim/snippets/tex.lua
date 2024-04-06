@@ -273,22 +273,22 @@ return {
 		d(1, visual_cbrace_spaceoptional),
 		i(0),
 	}),
-	s({ name = "tag", trig = "tag", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
-		d(1, function(args, parent, old_state, user_args)
-			local lineno = vim.fn.search("^% refcounter=\\d\\+", "nw")
-			if lineno == 0 then
-				print("No refcounter string! Adding one at top")
-				vim.fn.append(1, "% refcounter=1")
-				lineno = 2
-			end
-			local line = vim.fn.getline(lineno)
-			local curref = tonumber(line:match("%d+"))
-			vim.fn.setline(lineno, { line:gsub("%d+", tostring(curref + 1)) })
-			vim.fn.setreg(vim.v.register, "\\autoref{" .. tostring(curref) .. "}")
-			print("Autoref saved to register " .. vim.v.register)
-			return sn(nil, { t("\\label{" .. tostring(curref) .. "} \\tag{"), i(1, tostring(curref)), t("}") })
-		end),
-	}),
+	-- s({ name = "tag", trig = "tag", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
+	-- 	d(1, function(args, parent, old_state, user_args)
+	-- 		local lineno = vim.fn.search("^% refcounter=\\d\\+", "nw")
+	-- 		if lineno == 0 then
+	-- 			print("No refcounter string! Adding one at top")
+	-- 			vim.fn.append(1, "% refcounter=1")
+	-- 			lineno = 2
+	-- 		end
+	-- 		local line = vim.fn.getline(lineno)
+	-- 		local curref = tonumber(line:match("%d+"))
+	-- 		vim.fn.setline(lineno, { line:gsub("%d+", tostring(curref + 1)) })
+	-- 		vim.fn.setreg(vim.v.register, "\\autoref{" .. tostring(curref) .. "}")
+	-- 		print("Autoref saved to register " .. vim.v.register)
+	-- 		return sn(nil, { t("\\label{" .. tostring(curref) .. "} \\tag{"), i(1, tostring(curref)), t("}") })
+	-- 	end),
+	-- }),
 
 	-- Maths parenthesis
 	s({
@@ -418,8 +418,8 @@ return {
 	}, { f(gen_match(1)), t("_{"), f(gen_match(2)), t("}") }),
 	s({
 		name = "Xbar",
-		trig = "(%a)bar",
-		trigEngine = "pattern",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9]).bar",
+		trigEngine = "ecma",
 		condition = in_math,
 		snippetType = "autosnippet",
 	}, { t("\\overline{"), f(gen_match(1)), t("}") }),
@@ -511,6 +511,13 @@ return {
 		t("\\bm{"),
 		d(1, visual_cbrace_spaceoptional),
 	}),
+	s({
+		name = "bold",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9]).bm",
+		trigEngine = "ecma",
+		condition = in_math,
+		snippetType = "autosnippet",
+	}, { t("\\bm{"), f(gen_match(1)), t("}") }),
 	s({
 		name = "bold math inline",
 		trig = "(\\\\[a-zA-Z]+(?:{[a-zA-Z]*})?|[a-zA-Z])\\*\\*",
