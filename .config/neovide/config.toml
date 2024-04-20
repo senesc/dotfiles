@@ -1,7 +1,7 @@
 maximize = false
 
 [font]
-normal = ["FiraCode Nerd Font Mono"]
+normal = ["FiraCode Nerd Font Mono", "Apple Color Emoji"]
 size = 18
 
 [font.features]

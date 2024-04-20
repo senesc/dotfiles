@@ -109,6 +109,11 @@ return {
 		lspconfig.html.setup({
 			on_attach = M.on_attach,
 		})
+		lspconfig.markdown_oxide.setup({
+			on_attach = M.on_attach,
+			capabilities = M.capabilities;
+			root_dir = lspconfig.util.root_pattern('.obsidian', vim.fn.getcwd()),
+		})
 
 		lspconfig.cmake.setup{}
 

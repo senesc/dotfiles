@@ -32,22 +32,42 @@ local not_in_math = function()
 	return not in_math()
 end
 
+
 local function gen_match(no)
 	return function(args, parent, user_args)
+		return parent.captures[no]
+	end
+end
+
+
+local function gen_match_or_selected(no)
+	return function(args, parent, user_args)
+		-- FIXME:
 		return parent.captures[no]
 	end
 end
 local function visual_cbrace_spaceoptional(_, parent)
 	return sn(nil, { i(1, parent.env.TM_SELECTED_TEXT), t(next(parent.env.TM_SELECTED_TEXT) and "}" or "} ") })
 end
-local function input_visual(_, parent)
+
+
+local function input_selected_text(_, parent)
 	return sn(nil, { i(1, parent.env.TM_SELECTED_TEXT) })
+end
+
+
+local function selected_text_or_input(_, parent, old_state, default_text)
+	if next(parent.env.TM_SELECTED_TEXT) == nil then
+		return sn(nil, { i(1, default_text) })
+	else
+		return sn(nil, { t(parent.env.TM_SELECTED_TEXT) })
+	end
 end
 
 -- List of functions that are gonna be preceded by a backslash that require no parenthesis if the argument is simple enough
 -- local prepend_notmath = "()"
 local prepend_inmath =
-"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det|Mat|GL)"
+"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det|Mat|GL|notin|bigstar)"
 local sup_sub_inside_match = "[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*?"
 
 -- Rules for creating templates:
@@ -65,8 +85,8 @@ return {
 		name = "Latex base template",
 		trig = "template",
 		snippetType = "snippet",
-		condition = not in_math,
-		show_condition = not in_math,
+		condition = not_in_math,
+		show_condition = not_in_math,
 	}, {
 		t({
 			"\\documentclass[12pt, a4paper]{article}",
@@ -93,7 +113,7 @@ return {
 		i(2),
 		extras.nonempty(2, "]", ""),
 		t({ "", "\t" }),
-		d(3, input_visual),
+		d(3, input_selected_text),
 		t({ "", "\\end{" }),
 		extras.rep(1),
 		t({ "}", "" }),
@@ -217,24 +237,19 @@ return {
 		i(0),
 	}),
 	s({
-		name = "handy cases",
-		trig = "hcase",
-		trigEngine = "pattern",
+		name = "funzione definita a tratti",
+		trig = "tratti",
 		condition = in_math,
 		snippetType = "autosnippet",
 	}, {
 		t("\\begin{cases} "),
 		i(1),
-		t(" &\\text{"),
-		i(2, " se "),
-		t("} "),
-		i(3),
+		t(" &\\text{ se } "),
+		i(2),
 		t("\\\\ "),
+		i(3),
+		t(" &\\text{ se }"),
 		i(4),
-		t(" &\\text{"),
-		i(5, " se "),
-		t("} "),
-		i(6),
 		t(" \\end{cases}"),
 		i(0),
 	}),
@@ -265,11 +280,20 @@ return {
 		trig = "**",
 		snippetType = "autosnippet",
 		wordTrig = true,
-		condition = function()
-			return not in_math()
-		end,
+		condition = not_in_math,
 	}, {
 		t("\\textbf{"),
+		d(1, visual_cbrace_spaceoptional),
+		i(0),
+	}),
+	s({
+		name = "italic text",
+		trig = "__",
+		snippetType = "autosnippet",
+		wordTrig = true,
+		condition = not_in_math,
+	}, {
+		t("\\textit{"),
 		d(1, visual_cbrace_spaceoptional),
 		i(0),
 	}),
@@ -297,42 +321,45 @@ return {
 		wordTrig = false,
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\left( "), d(1, input_visual), t(" \\right)"), i(0) }),
+	}, {
+		t("\\left( "),
+		d(1, selected_text_or_input, nil, { user_args = { "" } }),
+		t(" \\right)"), i(0) }),
 	s({
 		name = "left-right square",
 		trig = "lrs",
 		wordTrig = false,
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\left[ "), d(1, input_visual), t(" \\right]"), i(0) }),
+	}, { t("\\left[ "), d(1, selected_text_or_input, nil, { user_args = { "" } }), t(" \\right]"), i(0) }),
 	s({
 		name = "left-right braces",
 		trig = "lrb",
 		wordTrig = false,
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\left\\{ "), d(1, input_visual), t(" \\right\\}"), i(0) }),
+	}, { t("\\left\\{ "), d(1, selected_text_or_input, nil, { user_args = { "" } }), t(" \\right\\}"), i(0) }),
 	s({
 		name = "left-right pipe",
 		trig = "lrp",
 		wordTrig = true,
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\left| "), d(1, input_visual), t(" \\right|"), i(0) }),
+	}, { t("\\left| "), d(1, selected_text_or_input, nil, { user_args = { "" } }), t(" \\right|"), i(0) }),
 	s({
 		name = "left-right angular",
 		trig = "lra",
 		wordTrig = false,
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\left< "), d(1, input_visual), t(" \\right>"), i(0) }),
+	}, { t("\\left< "), d(1, selected_text_or_input, nil, { user_args = { "" } }), t(" \\right>"), i(0) }),
 	s({
 		name = "left-right norm",
 		trig = "lrn",
 		wordTrig = false,
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\left\\Vert "), d(1, input_visual), t(" \\right\\Vert"), i(0) }),
+	}, { t("\\left\\Vert "), d(1, selected_text_or_input, nil, { user_args = { "" } }), t(" \\right\\Vert"), i(0) }),
 
 	s({
 		name = "ceiling",
@@ -367,7 +394,7 @@ return {
 		condition = in_math,
 		snippetType = "autosnippet",
 		wordTrig = false,
-	}, { t("^{"), i(1), t("} "), i(0) }),
+	}, { t("^{"), i(1), t("}"), i(0) }),
 	s({ --TODO is this good enough?
 		name = "subscript",
 		trig = "%s*con",
@@ -386,7 +413,7 @@ return {
 	}, { t("_{"), i(1), t("}"), i(0) }),
 	s( -- TODO consider changing this to sstack
 		{ name = "substack", trig = "sst", condition = in_math, snippetType = "autosnippet", wordTrig = true },
-		{ t("\\substack{ "), d(1, input_visual), t(" }"), i(0) }
+		{ t("\\substack{ "), d(1, input_selected_text), t(" }"), i(0) }
 	),
 	s({
 		name = "repetition subscript command (w/ arg only)",
@@ -425,15 +452,11 @@ return {
 	}, { t("\\overline{"), f(gen_match(1)), t("}") }),
 	s({
 		name = "Xdot",
-		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9])(\\.+)d",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9])?\\.(d+)t",
 		trigEngine = "ecma",
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\"), f(
-		function(args, parent, user_args)
-			return string.rep("d",string.len( parent.captures[2] ))
-		end
-	), t("ot{"), f(gen_match(1)), t("}") }),
+	}, { t("\\"), f(gen_match(2)), t("ot{"), f(gen_match_or_selected(1)), t("}") }),
 	s(
 		{ name = "bar", trig = "bar", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\overline{"), d(1, visual_cbrace_spaceoptional) }
@@ -530,6 +553,13 @@ return {
 		f(gen_match(1)),
 		t("}"),
 	}),
+	s({
+		name = "vec",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9]).hat",
+		trigEngine = "ecma",
+		condition = in_math,
+		snippetType = "autosnippet",
+	}, { t("\\hat{"), f(gen_match(1)), t("}") }),
 
 	-- Quantificatori
 	s(
@@ -626,14 +656,6 @@ return {
 	s({ name = "∈", trig = "inn", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, { t("\\in") }),
 	s({ name = "∋", trig = "nii", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, { t("\\ni") }),
 	s({
-		name = "∉",
-		trig = "(?<!\\\\)notin",
-		trigEngine = "ecma",
-		condition = in_math,
-		wordTrig = true,
-		snippetType = "autosnippet",
-	}, { t("\\notin") }),
-	s({
 		name = "similar, ~",
 		trig = "(?<!\\\\)sim",
 		trigEngine = "ecma",
@@ -641,64 +663,45 @@ return {
 		wordTrig = true,
 		snippetType = "autosnippet",
 	}, { t("\\sim") }),
-	s({ name = "overbrace", trig = "ovb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
-		c(1, {
-			d(nil, function(_, parent)
-				return sn(nil, {
-					t("\\overbrace{ "),
-					r(1, "first_arg"),
-					t(" }^{ "),
-					r(2, "note_arg"),
-					t(not next(parent.env.TM_SELECTED_TEXT) and " }" or " } "),
-				})
-			end),
-			d(nil, function(_, parent)
-				return sn(nil, {
-					t("\\overbrace{ "),
-					r(1, "first_arg"),
-					t(" }^{\\text{"),
-					r(2, "note_arg"),
-					t(not next(parent.env.TM_SELECTED_TEXT) and "}}" or "}} "),
-				})
-			end),
-		}),
-	}, { stored = { ["first_arg"] = i(1, "math stuff..."), ["note_arg"] = i(1, "note") } }),
-	-- TODO: add VISUAL
+	s({ name = "overbrace", trig = "udb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
+		t("\\overbrace{ "),
+		d(1, selected_text_or_input, nil, { user_args = { "math" } }),
+		t(" }_{ "), i(2, "note (math)"), t(" }")
+	}),
 	s({ name = "overset", trig = "ovs", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, {
 		t("\\overset{\\text{"),
 		i(1, "over"),
 		t("}}{"),
-		i(2),
+		d(1, selected_text_or_input, nil, { user_args = { "math" } }),
+		t("} "),
+		i(0),
+	}),
+	s({ name = "underset", trig = "uds", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, {
+		t("\\underset{\\text{"),
+		i(1, "over"),
+		t("}}{"),
+		d(1, selected_text_or_input, nil, { user_args = { "math" } }),
 		t("} "),
 		i(0),
 	}),
 	s({ name = "underbrace", trig = "udb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
-		c(1, {
-			d(nil, function(_, parent)
-				return sn(nil, {
-					t("\\underbrace{ "),
-					r(1, "first_arg"),
-					t(" }_{ "),
-					r(2, "note_arg"),
-					t(not next(parent.env.TM_SELECTED_TEXT) and " }" or " } "),
-				})
-			end),
-			d(nil, function(_, parent)
-				return sn(nil, {
-					t("\\underbrace{ "),
-					r(1, "first_arg"),
-					t(" }_{\\text{"),
-					r(2, "note_arg"),
-					t(not next(parent.env.TM_SELECTED_TEXT) and "}}" or "}} "),
-				})
-			end),
-		}),
-	}, { stored = { ["first_arg"] = i(1, "math stuff..."), ["note_arg"] = i(1, "note") } }),
+		t("\\underbrace{ "),
+		d(1, selected_text_or_input, nil, { user_args = { "math" } }),
+		t(" }_{ "), i(2, "note (math)"), t(" }")
+	}),
 
 	-- Altro
 	s(
 		{ name = "->", trig = "jot", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\to"), snippetType = "autosnippet" }
+	),
+	s(
+		{ name = "up arrow", trig = "jup", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+		{ t("\\uparrow"), snippetType = "autosnippet" }
+	),
+	s(
+		{ name = "down arrow", trig = "jdn", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
+		{ t("\\downarrow"), snippetType = "autosnippet" }
 	),
 	s(
 		{ name = "double ->", trig = "jdra", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
@@ -721,7 +724,7 @@ return {
 	}, { t("^{2}") }),
 	s({
 		name = "starred",
-		trig = "%s*str",
+		trig = ".st",
 		trigEngine = "pattern",
 		condition = in_math,
 		snippetType = "autosnippet",
@@ -741,7 +744,7 @@ return {
 	),
 	s(
 		{ name = "nth root", trig = "nrt", condition = in_math, snippetType = "autosnippet", wordTrig = true },
-		{ t("\\sqrt["), i(1), t("]{ "), i(2), t(" } "), i(0) }
+		{ t("\\sqrt["), i(1, "n"), t("]{ "), i(2), t(" } "), i(0) }
 	),
 	s({
 		name = "inverse",
@@ -752,20 +755,16 @@ return {
 		wordTrig = false,
 	}, { t("^{-1}") }),
 	s(
-		{ name = "x times", trig = "xx", condition = in_math, snippetType = "autosnippet", wordTrig = true },
+		{ name = "x times", trig = "xx", condition = in_math, priority = 1, snippetType = "autosnippet", wordTrig = true },
 		{ t("\\times") }
 	),
 	s(
 		{ name = "fraction", trig = "//", condition = in_math, snippetType = "autosnippet" },
-		{ t("\\frac{ "), d(1, input_visual), t(" }{ "), i(2), t(" } "), i(0) }
-	),
-	s(
-		{ name = "fraction", trig = "//", trigEngine = "ecma", condition = in_math, snippetType = "autosnippet" },
-		{ t("\\frac{ "), d(1, input_visual), t(" }{ "), i(2), t(" } "), i(0) }
+		{ t("\\frac{ "), d(1, input_selected_text), t(" }{ "), i(2), t(" } "), i(0) }
 	),
 	s(
 		{ name = "fraction inverse visual", trig = "/\\", condition = in_math, snippetType = "autosnippet" },
-		{ t("\\frac{ "), i(1), t(" }{ "), d(2, input_visual), t(" } "), i(0) }
+		{ t("\\frac{ "), i(1), t(" }{ "), d(2, input_selected_text), t(" } "), i(0) }
 	),
 	s({ name = "cUp", trig = "Uu", wordTrig = true, snippetType = "autosnippet", condition = in_math }, { t("\\cup") }),
 	s({ name = "cAp", trig = "Nn", wordTrig = true, snippetType = "autosnippet", condition = in_math }, { t("\\cap") }),
@@ -773,7 +772,7 @@ return {
 		{ name = "big cAp", trig = "nnn", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\bigcap_{"), i(1, "i \\in I"), t("} ") }
 	),
-	s( --TODO cycle between normal and substack
+	s(
 		{ name = "big cUp", trig = "uuu", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\bigcup_{"), i(1, "i \\in I"), t("} ") }
 	),
@@ -806,28 +805,37 @@ return {
 	s({ name = "plus or minus", trig = "jpm", wordTrig = true, snippetType = "autosnippet", condition = in_math }, {
 		t("\\pm"),
 	}),
+	s(
+		{
+			name = "differential",
+			trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})?|[a-zA-Z0-9])?\\.dd",
+			trigEngine = "ecma",
+			wordTrig = true,
+			snippetType = "autosnippet",
+			condition = in_math
+		}, { t("\\dd{"), f(gen_match(1)), t("}"), }),
 
 	-- Funzioni
-	s({
-		name = "function manual expand",
-		trig = "(\\\\[a-zA-Z]+(?:{[a-zA-Z]*})?'?|[a-zA-Z]'?) ?([\\^_]{"
-			.. sup_sub_inside_match
-			.. "})? ?([\\^_]{"
-			.. sup_sub_inside_match
-			.. "})?('*)F",
-		trigEngine = "ecma",
-		wordTrig = true,
-		condition = in_math,
-	}, {
-		f(gen_match(1)),
-		f(gen_match(2)),
-		f(gen_match(3)),
-		f(gen_match(4)),
-		t("\\left( "),
-		i(1),
-		t(" \\right) "),
-		i(0),
-	}),
+	-- s({
+	-- 	name = "function manual expand",
+	-- 	trig = "(\\\\[a-zA-Z]+(?:{[a-zA-Z]*})?'?|[a-zA-Z]'?) ?([\\^_]{"
+	-- 		.. sup_sub_inside_match
+	-- 		.. "})? ?([\\^_]{"
+	-- 		.. sup_sub_inside_match
+	-- 		.. "})?('*)F",
+	-- 	trigEngine = "ecma",
+	-- 	wordTrig = true,
+	-- 	condition = in_math,
+	-- }, {
+	-- 	f(gen_match(1)),
+	-- 	f(gen_match(2)),
+	-- 	f(gen_match(3)),
+	-- 	f(gen_match(4)),
+	-- 	t("\\left( "),
+	-- 	i(1),
+	-- 	t(" \\right) "),
+	-- 	i(0),
+	-- }),
 	-- s({
 	-- 	name = "function auto expand",
 	-- 	trig = "(\\\\[a-zA-Z]+(?:{[a-zA-Z]*})?'?|[a-zA-Z]'?) ?([\\^_]{"

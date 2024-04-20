@@ -133,7 +133,7 @@ return {
 				}),
 			},
 			sources = {
-				{ name = "nvim_lsp" },
+				{ name = "nvim_lsp", option = { markdown_oxide = { keyword_pattern = [[\(\k\| \|\/\|#\)\+]]}} },
 				{ name = "copilot" },
 				{ name = "luasnip" },
 				{ name = "buffer", max_item_count = 5 },
