@@ -16,18 +16,16 @@ end
 vim.opt.rtp:append(lazypath)
 
 local lazy_opts = {
-
 	ui = {
 		icons = {
 			ft = "",
 		},
 	},
-
 	performance = {
 		rtp = {
 			disabled_plugins = {
 				"2html_plugin",
-				"tohtml",
+				-- "tohtml",
 				"getscript",
 				"getscriptPlugin",
 				"gzip",

@@ -119,6 +119,11 @@ return {
 		t({ "}", "" }),
 		i(0),
 	}),
+	s({ name = "figure", trig = "figure", condition = not_in_math, snippetType = "autosnippet" }, {
+		t({ "\\begin{figure}[H]", "\t\\centering", "\t\\includegraphics[width=" }),
+		i(1, "0.5"),
+		t({ "\\textwidth]{" }), i(2), t({ "}", "\t\\label{fig:" }), i(3), t({ "}", "\\end{figure}" }),
+	}),
 	s({ name = "proof", trig = "proof", snippetType = "autosnippet", condition = conds.line_begin }, {
 		t({ "\\begin{proof} ", "" }),
 		c(1, {
@@ -202,8 +207,8 @@ return {
 		},
 		{
 			d(1, function(_, parent)
-				if parent.env.TM_CURRENT_LINE == "dm" then
-					return sn(nil, { t("\\[ ") })
+				if parent.env.TM_CURRENT_LINE == parent.captures[1] .. "dm" then
+					return sn(nil, { t(parent.captures[1] .. "\\[ ") })
 				else
 					return sn(nil, { t({ "", "\\[ " }) })
 				end
@@ -270,7 +275,7 @@ return {
 		end),
 		t("\\shortintertext{"),
 		i(1),
-		t({ "}", "" }),
+		t("}"),
 		f(gen_match(1)),
 		i(0),
 	}),
@@ -323,6 +328,16 @@ return {
 		snippetType = "autosnippet",
 	}, {
 		t("\\left( "),
+		d(1, selected_text_or_input, nil, { user_args = { "" } }),
+		t(" \\right)"), i(0) }),
+	s({
+		name = "left-right round with less space",
+		trig = "lrf",
+		wordTrig = false,
+		condition = in_math,
+		snippetType = "autosnippet",
+	}, {
+		t("\\!\\left( "),
 		d(1, selected_text_or_input, nil, { user_args = { "" } }),
 		t(" \\right)"), i(0) }),
 	s({
@@ -452,25 +467,28 @@ return {
 	}, { t("\\overline{"), f(gen_match(1)), t("}") }),
 	s({
 		name = "Xdot",
-		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9])?\\.(d+)t",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9])?(\\.+)dt",
 		trigEngine = "ecma",
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\"), f(gen_match(2)), t("ot{"), f(gen_match_or_selected(1)), t("}") }),
+	}, { t("\\"), f(function(args, parent, user_args)
+		return parent.captures[2]:gsub(".", "d")
+	end), t("ot{"), f(gen_match_or_selected(1)), t("}") }),
+
 	s(
 		{ name = "bar", trig = "bar", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
 		{ t("\\overline{"), d(1, visual_cbrace_spaceoptional) }
 	),
 	s({
 		name = "Xtilde",
-		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9])tld",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9]).tld",
 		trigEngine = "ecma",
 		condition = in_math,
 		snippetType = "autosnippet",
-	}, { t("\\widetilde{"), f(gen_match(1)), t("}") }),
+	}, { t("\\tilde{"), f(gen_match(1)), t("}") }),
 	s(
 		{ name = "tld", trig = "tld", wordTrig = true, condition = in_math, snippetType = "autosnippet" },
-		{ t("\\widetilde{"), d(1, visual_cbrace_spaceoptional) }
+		{ t("\\tilde{"), d(1, visual_cbrace_spaceoptional) }
 	),
 	s({ --TODO consider adding command capturing, e.g. \udl{\sin}
 		name = "Xunderlined",
@@ -663,10 +681,10 @@ return {
 		wordTrig = true,
 		snippetType = "autosnippet",
 	}, { t("\\sim") }),
-	s({ name = "overbrace", trig = "udb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
+	s({ name = "overbrace", trig = "ovb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
 		t("\\overbrace{ "),
 		d(1, selected_text_or_input, nil, { user_args = { "math" } }),
-		t(" }_{ "), i(2, "note (math)"), t(" }")
+		t(" }^{ "), i(2, "note (math)"), t(" }")
 	}),
 	s({ name = "overset", trig = "ovs", wordTrig = true, condition = in_math, snippetType = "autosnippet" }, {
 		t("\\overset{\\text{"),
@@ -687,7 +705,7 @@ return {
 	s({ name = "underbrace", trig = "udb", condition = in_math, wordTrig = true, snippetType = "autosnippet" }, {
 		t("\\underbrace{ "),
 		d(1, selected_text_or_input, nil, { user_args = { "math" } }),
-		t(" }_{ "), i(2, "note (math)"), t(" }")
+		t(" }_{\\mathclap{ "), i(2, "note (math)"), t(" }}")
 	}),
 
 	-- Altro
@@ -725,7 +743,6 @@ return {
 	s({
 		name = "starred",
 		trig = ".st",
-		trigEngine = "pattern",
 		condition = in_math,
 		snippetType = "autosnippet",
 		wordTrig = false,
@@ -924,6 +941,10 @@ return {
 	s(
 		{ trig = "pdv", snippetType = "autosnippet", wordTrig = true, condition = in_math },
 		{ t("\\pdv{ "), i(1), t(" }{ "), i(2), t(" }") }
+	),
+	s(
+		{ trig = "epdv", snippetType = "autosnippet", wordTrig = true, condition = in_math },
+		{ t("\\epdv{ "), i(1, "f"), t(" }{ "), i(2, "x"), t(" }_{ "), i(3, "x_0"), t(" }") }
 	),
 
 	s({

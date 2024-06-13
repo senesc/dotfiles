@@ -23,6 +23,7 @@ return {
 					["H"] = false,
 					["<Esc>"] = require("telescope.actions").close,
 					[" "] = require("telescope.actions").toggle_selection,
+					["<S-Enter>"] = require("telescope.actions").to_fuzzy_refine,
 				},
 			},
 			vimgrep_arguments = {
