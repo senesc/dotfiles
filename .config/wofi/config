@@ -1,0 +1,8 @@
+mode=drun
+allow_images=true
+display_generic=true
+no_actions=true
+width=30%
+height=60%
+halign=fill
+image_size=48

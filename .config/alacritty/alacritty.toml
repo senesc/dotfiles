@@ -1,4 +1,5 @@
-import = ["~/.config/alacritty/catppuccin/catppuccin-mocha.toml"]
+# line below is modified when theme is changed
+import = ["~/.config/alacritty/catppuccin/catppuccin-latte.toml"]
 
 [bell]
 animation = "EaseOutExpo"
@@ -8,11 +9,18 @@ duration = 200
 [colors]
 draw_bold_text_with_bright_colors = true
 
-[cursor.style]
-shape = "Beam"
+[cursor]
+style = { shape = "Block", blinking = "On" }
+thickness = 0.25
+blink_interval = 500
+blink_timeout = 10
 
 [env]
 TERM = "alacritty"
+
+[font]
+size = 14.0
+normal = { family = "Fira Code Nerd Font", style = "Medium" }
 
 [scrolling]
 multiplier = 3

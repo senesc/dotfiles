@@ -76,7 +76,7 @@ vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/custom.utf-8.add"
 vim.opt.matchpairs = "(:),{:},[:],<:>"
 vim.g.lua_snippets_path = { vim.fn.stdpath("config") .. "/snippets" }
 
--- vim.g.lighttheme = false
+vim.g.lighttheme = true
 
 local mappings = require("mappings")
 mappings.load_maps(mappings.maps.init)

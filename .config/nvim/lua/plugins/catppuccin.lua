@@ -4,19 +4,28 @@ return {
 	lazy = false,
 	priority = 1000,
 	opts = {
-		flavour = "mocha",
+		flavour = "latte",
 		background = {
 			light = "latte",
-			dark = "mocha",
+			dark = "frappe",
 		},
 		integrations = {
 			cmp = true,
 			nvimtree = true,
 			treesitter = true,
+			gitsigns = true,
+			aerial = true,
+			mason = true,
+			-- TODO: add nvim-dap nvim-lspconfig
+		},
+		dim_inactive = {
+			enabled = true,
+			shade = "dark",
+			percentage = "0.15",
 		},
 	},
 	config = function(_, opts)
 		require("catppuccin").setup(opts)
-		vim.cmd("colorscheme catppuccin")
+		vim.cmd.colorscheme("catppuccin")
 	end,
 }
