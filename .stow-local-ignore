@@ -2,4 +2,9 @@
 \.gitignore
 \.gitmodules
 
+\.stowrc
+
 ^/README.*
+
+stow.sh
+unstow.sh
