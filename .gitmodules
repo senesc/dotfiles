@@ -1,21 +1,6 @@
-[submodule "tmux-copy-toolkit"]
-	path = dot-config/tmux/plugins/tmux-copy-toolkit
-	url = https://github.com/CrispyConductor/tmux-copy-toolkit
-[submodule "tmux-better-mouse-mode"]
-	path = dot-config/tmux/plugins/tmux-better-mouse-mode
-	url = https://github.com/nhdaly/tmux-better-mouse-mode
-[submodule "tpm"]
-	path = dot-config/tmux/plugins/tpm
-	url = https://github.com/tmux-plugins/tpm
-[submodule "tmux-battery"]
-	path = dot-config/tmux/plugins/tmux-battery
-	url = https://github.com/tmux-plugins/tmux-battery
 [submodule "catppuccin-alacritty"]
 	path = dot-config/alacritty/catppuccin
 	url = https://github.com/catppuccin/alacritty
 [submodule "catppuccin-bat"]
 	path = dot-config/bat/themes/catppuccin
 	url = https://github.com/catppuccin/bat.git
-[submodule "catppuccin-tmux"]
-	path = dot-config/tmux/plugins/tmux
-	url = https://github.com/catppuccin/tmux.git
