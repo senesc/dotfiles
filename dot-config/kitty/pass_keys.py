@@ -1,0 +1,1 @@
+/home/matteo/.local/share/nvim/lazy/vim-kitty-navigator/pass_keys.py

@@ -7,3 +7,6 @@
 [submodule "dot-config/wofi/catppuccin"]
 	path = dot-config/wofi/catppuccin
 	url = https://github.com/quantumfate/wofi
+[submodule "dot-config/kitty/catppuccin"]
+	path = dot-config/kitty/catppuccin
+	url = https://github.com/catppuccin/kitty.git
