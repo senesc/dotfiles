@@ -22,18 +22,6 @@ return {
 	},
 	opts = function()
 		local cmp = require("cmp")
-		local cmp_ui = {
-			icons = true,
-			lspkind_text = true,
-			style = "atom_colored", -- default/flat_light/flat_dark/atom/atom_colored
-			border_color = "grey_fg", -- only applicable for "default" style, use color names from base30 variables
-			selected_item_bg = "simple", -- colored / simple
-		}
-
-		local field_arrangement = {
-			atom = { "kind", "abbr", "menu" },
-			atom_colored = { "kind", "abbr", "menu" },
-		}
 
 		local function border(hl_name)
 			return {
@@ -50,7 +38,7 @@ return {
 
 		local options = {
 			completion = {
-				completeopt = "menu,menuone",
+				completeopt = "menu,menuone,noinsert",
 			},
 
 			window = {
@@ -63,7 +51,7 @@ return {
 				documentation = {
 					border = border("CmpDocBorder"),
 					winhighlight = "Normal:CmpDoc",
-					max_width = 50,
+					max_width = 80,
 				},
 			},
 			snippet = {
@@ -74,20 +62,16 @@ return {
 
 			formatting = {
 				-- default fields order i.e completion word + item.kind + item.kind icons
-				fields = field_arrangement[cmp_ui.style] or { "abbr", "kind", "menu" },
+				fields = { "kind", "abbr", "menu" },
+				expandable_indicator = true,
 
 				format = function(_, item)
 					local icons = require("core.icons").lspkind
-					local icon = (cmp_ui.icons and icons[item.kind]) or ""
+					local icon = icons[item.kind] or ""
 
-					if cmp_ui.style == "atom" or cmp_ui.style == "atom_colored" then
-						icon = " " .. icon .. " "
-						item.menu = cmp_ui.lspkind_text and "   (" .. item.kind .. ")" or ""
-						item.kind = icon
-					else
-						icon = cmp_ui.lspkind_text and (" " .. icon .. " ") or icon
-						item.kind = string.format("%s %s", icon, cmp_ui.lspkind_text and item.kind or "")
-					end
+					-- icon = " " .. icon .. " "
+					item.menu = "   (" .. item.kind .. ")"
+					item.kind = icon
 
 					return item
 				end,
@@ -96,8 +80,8 @@ return {
 			mapping = {
 				["<C-p>"] = cmp.mapping.select_prev_item(),
 				["<C-n>"] = cmp.mapping.select_next_item(),
-				["<C-u>"] = cmp.mapping.scroll_docs(-4),
-				["<C-d>"] = cmp.mapping.scroll_docs(4),
+				["<C-u>"] = cmp.mapping.scroll_docs(-6),
+				["<C-d>"] = cmp.mapping.scroll_docs(6),
 				["<C-Space>"] = cmp.mapping.complete(),
 				["<Esc>"] = cmp.mapping.close(),
 				["<S-CR>"] = cmp.mapping.confirm({
@@ -133,13 +117,14 @@ return {
 				}),
 			},
 			sources = {
-				{ name = "nvim_lsp", option = { markdown_oxide = { keyword_pattern = [[\(\k\| \|\/\|#\)\+]]}} },
+				-- { name = "nvim_lsp", option = { markdown_oxide = { keyword_pattern = [[\(\k\| \|\/\|#\)\+]]}} },
+				{ name = "nvim_lsp" },
 				{ name = "copilot" },
 				{ name = "luasnip" },
-				{ name = "buffer", max_item_count = 5 },
 				{ name = "nvim_lua" },
 				{ name = "path" },
 				{ name = "nvim_lsp_signature_help" },
+				{ name = "buffer", max_item_count = 5 },
 			},
 			view = {
 				docs = {
@@ -147,10 +132,6 @@ return {
 				},
 			},
 		}
-
-		if cmp_ui.style ~= "atom" and cmp_ui.style ~= "atom_colored" then
-			options.window.completion.border = border("CmpBorder")
-		end
 
 		return options
 	end,

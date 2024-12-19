@@ -2,6 +2,7 @@ return {
 	"neovim/nvim-lspconfig",
 	init = function()
 		require("core.utils").lazy_load("nvim-lspconfig")
+		require("mappings").load_maps(require('mappings').maps.lspconfig)
 	end,
 	event = "VeryLazy",
 	dependencies = {
@@ -21,28 +22,29 @@ return {
 
 		M.on_attach = function(client, bufnr)
 			local mappings = require("mappings")
-			mappings.load_maps(mappings.maps.lspconfig, {buffer = bufnr})
+			mappings.load_maps(mappings.maps.lspconfig, { buffer = bufnr })
 		end
 
-		M.capabilities = vim.lsp.protocol.make_client_capabilities()
+		-- M.capabilities = vim.lsp.protocol.make_client_capabilities()
+		M.capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-		M.capabilities.textDocument.completion.completionItem = {
-			documentationFormat = { "markdown", "plaintext" },
-			snippetSupport = true,
-			preselectSupport = true,
-			insertReplaceSupport = true,
-			labelDetailsSupport = true,
-			deprecatedSupport = true,
-			commitCharactersSupport = true,
-			tagSupport = { valueSet = { 1 } },
-			resolveSupport = {
-				properties = {
-					"documentation",
-					"detail",
-					"additionalTextEdits",
-				},
-			},
-		}
+		-- M.capabilities.textDocument.completion.completionItem = {
+		-- 	documentationFormat = { "markdown", "plaintext" },
+		-- 	snippetSupport = true,
+		-- 	preselectSupport = true,
+		-- 	insertReplaceSupport = true,
+		-- 	labelDetailsSupport = true,
+		-- 	deprecatedSupport = true,
+		-- 	commitCharactersSupport = true,
+		-- 	tagSupport = { valueSet = { 1 } },
+		-- 	resolveSupport = {
+		-- 		properties = {
+		-- 			"documentation",
+		-- 			"detail",
+		-- 			"additionalTextEdits",
+		-- 		},
+		-- 	},
+		-- }
 		lspconfig.clangd.setup({
 			on_attach = M.on_attach,
 		})
@@ -73,17 +75,45 @@ return {
 				},
 			},
 		})
-		require("lspconfig").pylsp.setup({
+		lspconfig.pylsp.setup({
 			on_attach = M.on_attach,
+			capabilities = M.capabilities,
 			settings = {
-				pylsp = {
-					plugins = {
-						pycodestyle = {
-							-- ignore = { "W391" },
-						},
-					},
-				},
+				-- pylsp = {
+				-- plugins = {
+				-- rope_completion = {
+				-- 	enabled = true,
+				-- 				eager = true,
+				-- },
+				-- 			rope_autoimport = {
+				-- 				enabled = true,
+				-- 				completions = {
+				-- 					enabled = true
+				-- 				},
+				-- 				code_actions = {
+				-- 					enabled = true
+				-- 				}
+				-- 			},
+				-- 			pycodestyle = {
+				-- 				-- ignore = { "W391" },
+				-- 			},
+				-- jedi_completion = { fuzzy = true },
+				-- },
+				-- },
 			},
+		})
+		-- lspconfig.jedi_language_server.setup({
+		-- 	on_attach = M.on_attach,
+		-- 	capabilities = M.capabilities,
+		-- 	settings = {},
+		-- 	single_file_support = true,
+		-- })
+
+		lspconfig.pyright.setup({
+			capabilities = M.capabilities,
+			on_attach = M.on_attach,
+			filetypes = { "python" },
+			single_file_support = true
 		})
 
 		lspconfig.matlab_ls.setup({
@@ -95,6 +125,7 @@ return {
 			},
 			single_file_support = true,
 		})
+		require('lspconfig').bashls.setup {}
 
 		--Those are all from vscode-langservers-extracted npm module, not updated in mason!
 		lspconfig.jsonls.setup({
@@ -111,11 +142,11 @@ return {
 		})
 		lspconfig.markdown_oxide.setup({
 			on_attach = M.on_attach,
-			capabilities = M.capabilities;
+			capabilities = M.capabilities,
 			root_dir = lspconfig.util.root_pattern('.obsidian', vim.fn.getcwd()),
 		})
 
-		lspconfig.cmake.setup{}
+		lspconfig.cmake.setup {}
 
 		return M
 	end,

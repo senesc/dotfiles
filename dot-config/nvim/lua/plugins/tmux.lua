@@ -1,8 +1,10 @@
 return {
 	'aserowy/tmux.nvim',
 	init = function ()
-		local mappings = require("mappings")
-		mappings.load_maps(mappings.maps.tmux)
+		if os.getenv("TMUX") ~= nil then
+			local mappings = require("mappings")
+			mappings.load_maps(mappings.maps.tmux)
+		end
 	end,
 	opts = {
 		copy_sync = {

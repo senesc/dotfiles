@@ -31,11 +31,6 @@ M.init = {
 		["<M-f>"] = { "<S-Right>", "one word forward" },
 		["<M-tab>"] = { "<Esc> <cmd> tabnext <CR>", "next tab" },
 
-		["<M-h>"] = { "<Esc> <cmd> TmuxNavigateLeft <CR>", "window left" },
-		["<M-l>"] = { "<Esc> <cmd> TmuxNavigateRight <CR>", "window right" },
-		["<M-j>"] = { "<Esc> <cmd> TmuxNavigateDown <CR>", "window down" },
-		["<M-k>"] = { "<Esc> <cmd> TmuxNavigateUp <CR>", "window up" },
-
 		["<M-g>"] = { "<Esc>[szg`]a", "mark last misspelling as good" },
 		["<M-c>"] = { "<Esc>[s1z=`]a", "auto correct last misspelling" },
 	},
@@ -50,6 +45,33 @@ M.init = {
 	x = {
 		["p"] = { 'p:let @+=@0<CR>:let @"=@0<CR>', "dont copy replaced text", opts = { silent = true } },
 	},
+}
+
+M.tmux = {
+	n = {
+		["<M-h>"] = { "<Esc> <cmd> TmuxNavigateLeft <CR>", "window left" },
+		["<M-l>"] = { "<Esc> <cmd> TmuxNavigateRight <CR>", "window right" },
+		["<M-j>"] = { "<Esc> <cmd> TmuxNavigateDown <CR>", "window down" },
+		["<M-k>"] = { "<Esc> <cmd> TmuxNavigateUp <CR>", "window up" },
+	}
+}
+
+M.kitty = {
+	n = {
+		["<M-h>"] = { "<Esc> <cmd> KittyNavigateLeft <CR>", "window left" },
+		["<M-l>"] = { "<Esc> <cmd> KittyNavigateRight <CR>", "window right" },
+		["<M-j>"] = { "<Esc> <cmd> KittyNavigateDown <CR>", "window down" },
+		["<M-k>"] = { "<Esc> <cmd> KittyNavigateUp <CR>", "window up" },
+	}
+}
+
+M.navigation_vanilla = {
+	n = {
+		["<M-h>"] = { "<Esc><C-w>h", "window left" },
+		["<M-l>"] = { "<Esc><C-w>l", "window right" },
+		["<M-j>"] = { "<Esc><C-w>j", "window down" },
+		["<M-k>"] = { "<Esc><C-w>k", "window up" },
+	}
 }
 
 M.blankline = {
@@ -111,7 +133,7 @@ M.lspconfig = {
 			"lsp signature_help",
 		},
 
-		["<leader>D"] = {
+		["g<M-d>"] = {
 			function()
 				vim.lsp.buf.type_definition()
 			end,
@@ -125,7 +147,7 @@ M.lspconfig = {
 			"lsp rename symbol",
 		},
 
-		["<leader>ca"] = {
+		["<localleader>ca"] = {
 			function()
 				vim.lsp.buf.code_action()
 			end,
@@ -139,7 +161,7 @@ M.lspconfig = {
 			"lsp references",
 		},
 
-		["<leader>f"] = {
+		["<localleader>d"] = {
 			function()
 				vim.diagnostic.open_float({ border = "rounded" })
 			end,
@@ -160,7 +182,7 @@ M.lspconfig = {
 			"goto_next",
 		},
 
-		["<leader>q"] = {
+		["<localleader>D"] = {
 			function()
 				vim.diagnostic.setloclist()
 			end,
@@ -300,6 +322,9 @@ M.telescope = {
 
 		-- theme switcher
 		["<leader>cs"] = { "<cmd> Telescope colorscheme <CR>", "change colorscheme" },
+
+		-- nvim-notify
+		["<leader>fn"] = { "<cmd> Telescope notify <CR>", "list notifications" }
 	},
 }
 
@@ -475,7 +500,7 @@ M.nvimtree_onattach = {
 			end, "Move root up",
 		},
 		["zx"] = {
-			function ()
+			function()
 				local dir = vim.fn.getcwd(-1, -1)
 				print(dir)
 				require("nvim-tree.api").tree.change_root(dir)
@@ -707,47 +732,76 @@ M.gitsigns = {
 	n = {
 		["]g"] = { function()
 			require("gitsigns").next_hunk()
-			require("nvim-tree.api").git.reload()
 		end, "Next Git Hunk" },
 		["[g"] = { function()
 			require("gitsigns").prev_hunk()
-			require("nvim-tree.api").git.reload()
 		end, "Next Git Hunk" },
-		["<leader>ga"] = {
+		["<localleader>ga"] = {
 			function()
 				require("gitsigns").stage_hunk() -- TODO: add ranges
 				require("nvim-tree.api").git.reload()
-			end, "Stage Git Hunk"
+			end, "Stage this hunk"
 		},
-		["<leader>gA"] = {
+		["<localleader>gA"] = {
 			function()
 				require("gitsigns").stage_buffer()
 				require("nvim-tree.api").git.reload()
-			end, "Stage Buffer"
+			end, "Stage whole buffer"
 		},
-		["<leader>gu"] = {
+		["<localleader>gu"] = {
 			function()
 				require("gitsigns").undo_stage_hunk()
 				require("nvim-tree.api").git.reload()
-			end
+			end, "Undo stage hunk"
 		},
-		["<leader>gr"] = {
+		["<localleader>gr"] = {
 			function()
 				require("gitsigns").reset_hunk()
 				require("nvim-tree.api").git.reload()
-			end
+			end, "Reset hunk"
 		},
-		["<leader>gR"] = {
+		["<localleader>gR"] = {
 			function()
 				require("gitsigns").reset_buffer()
 				require("nvim-tree.api").git.reload()
-			end
+			end, "Reset whole buffer"
 		},
-		["<leader>gd"] = {
+		["<localleader>gd"] = {
 			function()
 				require("gitsigns").diffthis()
-			end
+			end, "Git diff buffer"
 		},
+	}
+}
+
+M.iron = {
+	n = {
+		["<localleader>r"] = { "<cmd> IronRepl <CR>", "Start/toggle REPL", },
+		["<localleader>rr"] = { "<cmd> IronRestart <CR>", "Retart REPL", },
+		["<S-CR>"] = { function()
+			local core = require('iron.core')
+			core.send_line()
+		end, "Send line to REPL" },
+		["<localleader>rp"] = { function()
+			local core = require('iron.core')
+			core.send_paragraph()
+		end, "Send paragraph to REPL"},
+		["<localleader>rf"] = { function()
+			local core = require('iron.core')
+			core.send_file()
+		end, "Send file to REPL"},
+		["<localleader>rc"] = { function()
+			local core = require('iron.core')
+			core.send_until_cursor()
+		end, "Send until cursor to REPL"},
+		["<localleader>ri"] = { "<cmd> IronFocus <CR>", "Focus REPL"},
+	},
+	v = {
+		["<S-CR>"] = { function()
+			local core = require('iron.core')
+			core.mark_visual()
+			core.send_mark()
+		end, "Send selection to REPL" }
 	}
 }
 

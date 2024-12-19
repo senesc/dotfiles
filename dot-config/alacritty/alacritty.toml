@@ -1,5 +1,6 @@
 # line below is modified when theme is changed
-import = ["~/.config/alacritty/catppuccin/catppuccin-latte.toml"]
+[general]
+import = ["~/.config/alacritty/catppuccin/catppuccin-frappe.toml"]
 
 [bell]
 animation = "EaseOutExpo"

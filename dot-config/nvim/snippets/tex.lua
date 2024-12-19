@@ -67,7 +67,7 @@ end
 -- List of functions that are gonna be preceded by a backslash that require no parenthesis if the argument is simple enough
 -- local prepend_notmath = "()"
 local prepend_inmath =
-"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det|Mat|GL|notin|bigstar)"
+"(deg|sum|mis|ell|star|perp|max|min|inf|sup|arcsin|sin|arccos|arctan|cos|arccot|arccsc|arcsec|ln|tan|log|exp|cot|csc|ldots|cdots|vdots|ddots|Hom|End|Aut|rk|tr|sgn|det|Mat|GL|notin|bigstar|Res)"
 local sup_sub_inside_match = "[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*?"
 
 -- Rules for creating templates:
@@ -165,6 +165,12 @@ return {
 		i(0),
 	}),
 	s({ name = "subsection", trig = "^%s*ssect", trigEngine = "pattern", snippetType = "autosnippet" }, {
+		t("\\subsection{"),
+		i(1),
+		t({ "}", "" }),
+		i(0),
+	}),
+	s({ name = "paragraph", trig = "^%s*par", priority = 999, trigEngine = "pattern"}, {
 		t("\\subsection{"),
 		i(1),
 		t({ "}", "" }),
@@ -572,12 +578,19 @@ return {
 		t("}"),
 	}),
 	s({
-		name = "vec",
+		name = "hat",
 		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9]).hat",
 		trigEngine = "ecma",
 		condition = in_math,
 		snippetType = "autosnippet",
 	}, { t("\\hat{"), f(gen_match(1)), t("}") }),
+	s({
+		name = "vec",
+		trig = "(\\\\[a-zA-Z]*(?:{[a-zA-Z0-9\\*\\\\\\^\\_\\-\\+]*})? ?|[a-zA-Z0-9]).vec",
+		trigEngine = "ecma",
+		condition = in_math,
+		snippetType = "autosnippet",
+	}, { t("\\vec{"), f(gen_match(1)), t("}") }),
 
 	-- Quantificatori
 	s(
@@ -1186,4 +1199,5 @@ return {
 	s({ name = "Rn", trig = "Rn", condition = in_math, snippetType = "autosnippet", wordTrig = true }, {
 		t("\\mathbb{R}^{n} "),
 	}),
+	s({name = "cancel", trig = "cnc", condition = in_math, snippetType = "autosnippet", wordTrig = true}, { t("\\cancel{ "), d(1, visual_cbrace_spaceoptional), i(0) })
 }
